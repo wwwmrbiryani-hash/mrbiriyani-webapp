@@ -2,23 +2,80 @@
 <html>
 <head>
 <title>MR Biriyani</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f5f5f5;
+text-align:center;
+}
+
+h1{
+color:#e63946;
+}
+
+.menu{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+border-radius:10px;
+width:200px;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+button{
+background:#e63946;
+color:white;
+border:none;
+padding:10px;
+border-radius:5px;
+cursor:pointer;
+}
+
+</style>
 </head>
 
 <body>
 
-<h1>Welcome to MR Biriyani</h1>
-
+<h1>MR Biriyani</h1>
 <p>Best Biryani in your city</p>
 
-<h2>Menu</h2>
+<div class="menu">
 
-<ul>
-<li>Chicken Biryani - ₹120</li>
-<li>Matka Biryani - ₹180</li>
-<li>Egg Biryani - ₹90</li>
-</ul>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+<h3>Chicken Biryani</h3>
+<p>₹120</p>
+<button>Add to Cart</button>
+</div>
 
-<button>Order on WhatsApp</button>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a">
+<h3>Matka Biryani</h3>
+<p>₹180</p>
+<button>Add to Cart</button>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0">
+<h3>Egg Biryani</h3>
+<p>₹90</p>
+<button>Add to Cart</button>
+</div>
+
+</div>
 
 </body>
 </html>
