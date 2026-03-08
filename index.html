@@ -16,10 +16,12 @@ font-family:Arial;
 background:#f5f5f5;
 }
 
-/* loading */
+/* loading screen */
 
 #loading{
 position:fixed;
+top:0;
+left:0;
 width:100%;
 height:100%;
 background:white;
@@ -40,11 +42,11 @@ animation:slideDown 1s;
 }
 
 @keyframes slideDown{
-from{transform:translateY(-30px);opacity:0}
-to{transform:translateY(0);opacity:1}
+from{opacity:0;transform:translateY(-20px)}
+to{opacity:1;transform:translateY(0)}
 }
 
-/* slider */
+/* banner slider */
 
 .slider img{
 width:100%;
@@ -63,7 +65,7 @@ padding:10px;
 
 .card{
 background:white;
-border-radius:10px;
+border-radius:12px;
 padding:10px;
 text-align:center;
 box-shadow:0 3px 10px rgba(0,0,0,0.1);
@@ -91,14 +93,14 @@ height:30px;
 /* cart badge */
 
 #cartBadge{
-position:absolute;
-top:5px;
-right:10px;
+position:fixed;
+top:15px;
+right:15px;
 background:red;
 color:white;
-padding:4px 8px;
+padding:6px 10px;
 border-radius:50%;
-font-size:12px;
+font-size:14px;
 }
 
 /* cart bar */
@@ -142,7 +144,7 @@ border-radius:8px;
 border:1px solid #ccc;
 }
 
-/* success */
+/* success screen */
 
 #success{
 position:fixed;
@@ -171,26 +173,20 @@ border-radius:10px;
 
 <body>
 
-<!-- loading -->
-
 <div id="loading">
-
 <h2>MR Biriyani</h2>
 <p>Loading delicious food...</p>
-
 </div>
 
 <header>
-
 <h2>MR Biriyani</h2>
 <p>Welcome to Patnagarh</p>
-
 </header>
 
+<div id="cartBadge">0</div>
+
 <div class="slider">
-
 <img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
-
 </div>
 
 <div id="home">
@@ -245,9 +241,9 @@ border-radius:10px;
 
 <h2>Delivery Details</h2>
 
-<input placeholder="Name">
+<input id="name" placeholder="Name">
 
-<input placeholder="Mobile Number">
+<input id="phone" placeholder="Mobile Number">
 
 <input id="address" placeholder="Address">
 
@@ -256,7 +252,9 @@ border-radius:10px;
 <h3>Payment Method</h3>
 
 <label><input type="radio" name="pay">Cash</label><br>
+
 <label><input type="radio" name="pay">UPI</label><br>
+
 <label><input type="radio" name="pay">PhonePe</label>
 
 <button onclick="confirmOrder()">Confirm Order</button>
@@ -277,7 +275,7 @@ border-radius:10px;
 
 <div id="cartBar" onclick="openCheckout()">
 
-Place Order
+Place Order ₹<span id="total">0</span>
 
 </div>
 
@@ -301,13 +299,18 @@ setTimeout(()=>{
 
 document.getElementById("loading").style.display="none"
 
+initMap()
+
 },3000)
 
-/* slider */
+/* banner slider */
 
 let banners=[
+
 "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d",
+
 "https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a"
+
 ]
 
 let b=0
@@ -315,11 +318,14 @@ let b=0
 setInterval(()=>{
 
 b=(b+1)%banners.length
+
 document.getElementById("banner").src=banners[b]
 
 },3000)
 
-/* quantity */
+/* cart */
+
+let prices={c:120,m:180}
 
 function changeQty(id,val){
 
@@ -329,9 +335,25 @@ let q=parseInt(el.innerText)
 
 q+=val
 
-if(q<0) q=0
+if(q<0)q=0
 
 el.innerText=q
+
+updateCart()
+
+}
+
+function updateCart(){
+
+let c=parseInt(document.getElementById("c").innerText)
+
+let m=parseInt(document.getElementById("m").innerText)
+
+let total=c*120+m*180
+
+document.getElementById("total").innerText=total
+
+document.getElementById("cartBadge").innerText=c+m
 
 }
 
@@ -340,6 +362,7 @@ el.innerText=q
 function openCheckout(){
 
 document.getElementById("home").style.display="none"
+
 document.getElementById("checkout").style.display="block"
 
 }
@@ -358,15 +381,49 @@ pos.coords.latitude+","+pos.coords.longitude
 
 }
 
-/* confirm */
+/* order confirm */
 
 function confirmOrder(){
+
+let order={
+
+name:document.getElementById("name").value,
+
+time:new Date().toLocaleString()
+
+}
+
+let history=JSON.parse(localStorage.getItem("orders")||"[]")
+
+history.push(order)
+
+localStorage.setItem("orders",JSON.stringify(history))
 
 document.getElementById("success").style.display="flex"
 
 }
 
+/* order history */
+
+function showOrders(){
+
+let history=JSON.parse(localStorage.getItem("orders")||"[]")
+
+alert("Orders:\n"+history.map(o=>o.time).join("\n"))
+
+}
+
+/* home */
+
+function showHome(){
+
+location.reload()
+
+}
+
 /* map */
+
+function initMap(){
 
 var map=L.map('map').setView([20.84,82.57],13)
 
@@ -374,7 +431,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
 
 L.marker([20.84,82.57]).addTo(map)
 
+}
+
 </script>
 
 </body>
-  </html>
+</html>
