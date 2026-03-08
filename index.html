@@ -3,180 +3,11 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>MR Biriyani - Patnagarh</title>
 
+<link rel="stylesheet" href="style.css">
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
-
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-background:#f5f5f5;
-text-align:center;
-}
-
-.dark{
-background:#121212;
-color:white;
-}
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:10px;
-background:white;
-position:sticky;
-top:0;
-}
-
-.logo{
-width:45px;
-}
-
-.search{
-padding:10px;
-border-radius:20px;
-border:1px solid #ddd;
-width:60%;
-}
-
-.toggle{
-background:#e63946;
-color:white;
-border:none;
-padding:10px;
-border-radius:10px;
-}
-
-.offer{
-background:#e63946;
-color:white;
-padding:8px;
-font-weight:bold;
-}
-
-.hero{
-overflow:hidden;
-background:white;
-}
-
-.hero-track{
-display:flex;
-animation:slide 10s infinite;
-}
-
-.hero-card{
-min-width:100%;
-padding:12px;
-background:#fff3cd;
-font-weight:bold;
-}
-
-@keyframes slide{
-0%{transform:translateX(0)}
-33%{transform:translateX(-100%)}
-66%{transform:translateX(-200%)}
-}
-
-.menu{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-padding:20px;
-}
-
-.card{
-background:white;
-padding:15px;
-border-radius:12px;
-box-shadow:0 4px 10px rgba(0,0,0,0.15);
-}
-
-.card img{
-width:100%;
-border-radius:10px;
-}
-
-button{
-background:#e63946;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:8px;
-margin-top:10px;
-}
-
-.cart{
-background:white;
-padding:20px;
-margin:20px;
-border-radius:12px;
-box-shadow:0 4px 10px rgba(0,0,0,0.15);
-}
-
-input{
-padding:10px;
-margin:6px;
-border-radius:6px;
-border:1px solid #ddd;
-width:80%;
-}
-
-#map{
-display:none;
-height:300px;
-margin:20px;
-border-radius:10px;
-}
-
-.success{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:white;
-padding:25px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
-display:none;
-font-size:22px;
-}
-
-.live-order{
-position:fixed;
-bottom:70px;
-left:50%;
-transform:translateX(-50%);
-background:black;
-color:white;
-padding:10px 15px;
-border-radius:20px;
-font-size:13px;
-animation:fade 6s infinite;
-}
-
-@keyframes fade{
-0%{opacity:0}
-20%{opacity:1}
-80%{opacity:1}
-100%{opacity:0}
-}
-
-nav{
-position:fixed;
-bottom:0;
-width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:12px;
-box-shadow:0 -5px 20px rgba(0,0,0,0.2);
-}
-
-</style>
 
 </head>
 
@@ -188,15 +19,15 @@ box-shadow:0 -5px 20px rgba(0,0,0,0.2);
 
 <input placeholder="Search food" class="search">
 
-<button class="toggle" onclick="toggleTheme()">🌙</button>
+<button onclick="toggleTheme()" class="darkBtn">🌙</button>
 
 </header>
 
 <div class="offer">
-
 🔥 Patnagarh Special — Free Delivery Today
-
 </div>
+
+<!-- HERO SLIDER -->
 
 <div class="hero">
 
@@ -213,54 +44,39 @@ box-shadow:0 -5px 20px rgba(0,0,0,0.2);
 </div>
 
 <h1>MR Biriyani</h1>
-
 <p>Patnagarh's Premium Biryani</p>
+
+<!-- FOOD MENU -->
 
 <div class="menu">
 
 <div class="card">
-
 <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
-
 <h3>Chicken Biryani</h3>
-
 <p>⭐ 4.7</p>
-
 <p>₹120</p>
-
 <button onclick="addToCart('Chicken',120)">Add to Cart</button>
-
 </div>
 
 <div class="card">
-
 <img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a">
-
 <h3>Matka Biryani</h3>
-
 <p>⭐ 4.6</p>
-
 <p>₹180</p>
-
 <button onclick="addToCart('Matka',180)">Add to Cart</button>
-
 </div>
 
 <div class="card">
-
 <img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0">
-
 <h3>Egg Biryani</h3>
-
 <p>⭐ 4.5</p>
-
 <p>₹90</p>
-
 <button onclick="addToCart('Egg',90)">Add to Cart</button>
-
 </div>
 
 </div>
+
+<!-- CART -->
 
 <div class="cart">
 
@@ -269,18 +85,12 @@ box-shadow:0 -5px 20px rgba(0,0,0,0.2);
 <p id="total">Total ₹0</p>
 
 <input id="name" placeholder="Your Name">
-
 <input id="phone" placeholder="Phone Number">
-
 <input id="address" placeholder="Delivery Address">
 
 <br>
 
-<button onclick="getLocation()">
-
-📍 Use My Correct Location
-
-</button>
+<button onclick="getLocation()">📍 Use My Correct Location</button>
 
 <br>
 
@@ -292,87 +102,25 @@ box-shadow:0 -5px 20px rgba(0,0,0,0.2);
 
 <div id="map"></div>
 
-<div class="success" id="success">
-
+<div id="success" class="success">
 🎉 Order Confirmed!
-
 </div>
 
 <div class="live-order">
-
 🔥 12 people ordered Chicken Biryani today
-
 </div>
 
 <nav>
 
 <div>🏠 Home</div>
-
 <div>🧾 Orders</div>
-
 <div>👤 Profile</div>
 
 </nav>
 
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-<script>
-
-let total=0
-
-function addToCart(name,price){
-
-total+=price
-
-document.getElementById("total").innerHTML="Total ₹"+total
-
-}
-
-function toggleTheme(){
-
-document.body.classList.toggle("dark")
-
-}
-
-function placeOrder(){
-
-document.getElementById("success").style.display="block"
-
-setTimeout(()=>{
-
-document.getElementById("success").style.display="none"
-
-},3000)
-
-}
-
-function getLocation(){
-
-document.getElementById("map").style.display="block"
-
-navigator.geolocation.getCurrentPosition(function(pos){
-
-let lat=pos.coords.latitude
-
-let lon=pos.coords.longitude
-
-document.getElementById("address").value="Lat:"+lat+" Long:"+lon
-
-let map=L.map('map').setView([lat,lon],15)
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
-
-L.marker([lat,lon]).addTo(map)
-
-.bindPopup("Your Location")
-
-.openPopup()
-
-})
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
-</html>
+  </html>
