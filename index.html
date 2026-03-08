@@ -1,23 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MR Biriyani - Patnagarh</title>
+
+<title>MR Biriyani</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
 
 </head>
 
 <body>
 
-<!-- LOADING SCREEN -->
+<div class="loading">
 
-<div id="loadingScreen">
+<img src="images/logo.png" class="bigLogo">
 
-<img src="logo.png" class="logoBig">
-
-<h2>MR Biriyani</h2>
+<h1>MR Biriyani</h1>
 
 <div class="loader"></div>
 
@@ -25,150 +24,15 @@
 
 </div>
 
-<!-- ORDER SUCCESS SCREEN -->
+<script>
 
-<div id="successScreen">
+setTimeout(()=>{
 
-<div class="successBox">
+window.location="pages/home.html"
 
-<h1>🎉 Order Confirmed</h1>
+},4000)
 
-<p id="orderNumber"></p>
-
-<p>Delivery in 30 minutes</p>
-
-</div>
-
-</div>
-
-<!-- HEADER -->
-
-<header>
-
-<img src="logo.png" class="logo">
-
-<input class="search" placeholder="Search food">
-
-<button onclick="toggleTheme()">🌙</button>
-
-</header>
-
-<!-- OFFER BAR -->
-
-<div class="offer">
-
-🔥 Patnagarh Special — Free Delivery Today
-
-</div>
-
-<!-- HERO SLIDER -->
-
-<div class="hero">
-
-<div class="heroTrack">
-
-<div class="heroCard">🍗 Chicken Biryani ₹99</div>
-
-<div class="heroCard">🥘 Matka Biryani Special</div>
-
-<div class="heroCard">🥚 Egg Biryani Combo</div>
-
-</div>
-
-</div>
-
-<!-- HOME SCREEN -->
-
-<div id="homeScreen">
-
-<h2 class="title">MR Biriyani</h2>
-
-<p class="subtitle">Patnagarh's Premium Biryani</p>
-
-<div class="menu" id="menu"></div>
-
-</div>
-
-<!-- CART SCREEN -->
-
-<div id="cartScreen">
-
-<div class="cart">
-
-<h2>Your Cart</h2>
-
-<div id="cartItems"></div>
-
-<h3 id="totalPrice">Total ₹0</h3>
-
-<h3>Payment Method</h3>
-
-<label><input type="radio" name="pay"> Cash On Delivery</label>
-
-<label><input type="radio" name="pay"> UPI</label>
-
-<label><input type="radio" name="pay"> PhonePe</label>
-
-<label><input type="radio" name="pay"> Google Pay</label>
-
-<br><br>
-
-<input id="name" placeholder="Your Name">
-
-<input id="phone" placeholder="Phone Number">
-
-<input id="address" placeholder="Delivery Address">
-
-<br>
-
-<button onclick="getLocation()">📍 Use My Location</button>
-
-<button onclick="placeOrder()">Place Order</button>
-
-</div>
-
-<h3 class="title">Your Location</h3>
-
-<div id="map"></div>
-
-</div>
-
-<!-- PROFILE -->
-
-<div id="profileScreen">
-
-<h2 class="title">Profile</h2>
-
-<p>Name</p>
-
-<p>Phone</p>
-
-<p>Saved Address</p>
-
-</div>
-
-<!-- FLOATING ORDER MESSAGE -->
-
-<div class="liveOrder">
-
-🔥 12 people ordered Chicken Biryani today
-
-</div>
-
-<!-- NAVIGATION -->
-
-<nav>
-
-<div onclick="showHome()">🏠 Home</div>
-
-<div onclick="showCart()">🛒 Cart</div>
-
-<div onclick="showProfile()">👤 Profile</div>
-
-</nav>
-
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-<script src="app.js"></script>
+</script>
 
 </body>
 </html>
