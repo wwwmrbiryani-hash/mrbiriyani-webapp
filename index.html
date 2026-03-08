@@ -1,10 +1,11 @@
 <!DOCTYPE html><html>
-<head><meta name="viewport" content="width=device-width, initial-scale=1"><title>MR Biriyani</title><style>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>MR Biriyani</title><style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:#f6f6f6;
 }
 
 /* loading */
@@ -17,27 +18,54 @@ width:100%;
 height:100%;
 background:white;
 display:flex;
-flex-direction:column;
 align-items:center;
 justify-content:center;
+flex-direction:column;
 z-index:999;
 }
 
 /* header */
 
 header{
-text-align:center;
-padding:15px;
 background:white;
-animation:fade 1s;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
-@keyframes fade{
-from{opacity:0}
-to{opacity:1}
+header h2{
+margin:0;
 }
 
-/* banner slider */
+/* sidebar */
+
+#sidebar{
+position:fixed;
+left:-250px;
+top:0;
+width:250px;
+height:100%;
+background:#111;
+color:white;
+padding:20px;
+transition:0.3s;
+z-index:1000;
+}
+
+#sidebar a{
+display:block;
+color:white;
+margin:15px 0;
+text-decoration:none;
+}
+
+#sidebar.open{
+left:0;
+}
+
+/* banner */
 
 .slider img{
 width:100%;
@@ -45,21 +73,22 @@ height:180px;
 object-fit:cover;
 }
 
-/* menu */
+/* food carousel */
 
-.menu{
-display:grid;
-grid-template-columns:1fr 1fr;
+.carousel{
+display:flex;
+overflow-x:auto;
 gap:10px;
 padding:10px;
 }
 
 .card{
+min-width:200px;
 background:white;
 border-radius:10px;
 padding:10px;
-text-align:center;
 box-shadow:0 3px 10px rgba(0,0,0,0.1);
+text-align:center;
 }
 
 .card img{
@@ -85,16 +114,13 @@ font-size:18px;
 /* cart badge */
 
 #cartBadge{
-position:fixed;
-top:15px;
-right:15px;
 background:red;
 color:white;
 padding:6px 10px;
 border-radius:50%;
 }
 
-/* place order bar */
+/* cart bar */
 
 #cartBar{
 position:fixed;
@@ -113,30 +139,98 @@ nav{
 position:fixed;
 bottom:0;
 width:100%;
+background:white;
 display:flex;
 justify-content:space-around;
-background:white;
 padding:12px;
-box-shadow:0 -3px 10px rgba(0,0,0,0.2);
+box-shadow:0 -2px 10px rgba(0,0,0,0.2);
+}
+
+/* cart page */
+
+#cartPage{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+padding:20px;
+overflow:auto;
+z-index:2000;
+}
+
+/* checkout */
+
+#checkout{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+padding:20px;
+z-index:3000;
+}
+
+/* success */
+
+#success{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+font-size:26px;
+z-index:4000;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
 }
 
 </style></head><body><div id="loading"><h2>MR Biriyani</h2>
-<p>Loading delicious food...</p></div><header><h2>MR Biriyani</h2>
-<p>Welcome to Patnagarh</p></header><div id="cartBadge">0</div><div class="slider"><img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"></div><div class="menu"><div class="card"><img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"><h3>Chicken Biryani</h3><p>₹120</p><div class="qty"><button onclick="changeQty('c',-1)">−</button>
+<p>Loading delicious food...</p></div><div id="sidebar"><h3>Menu</h3><a href="#">Home</a>
+<a href="#" onclick="openCart()">Cart</a>
+<a href="#" onclick="showOrders()">Orders</a>
 
+</div><header><button onclick="toggleMenu()">☰</button>
+
+<h2>MR Biriyani</h2><div id="cartBadge">0</div></header><div class="slider"><img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"></div><h3 style="padding:10px">Popular Biryani</h3><div class="carousel"><div class="card"><img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"><h3>Chicken Biryani</h3><p>₹120</p><div class="qty"><button onclick="changeQty('c',-1)">−</button>
 <span id="c">0</span>
-
 <button onclick="changeQty('c',1)">+</button>
 
 </div></div><div class="card"><img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a"><h3>Matka Biryani</h3><p>₹180</p><div class="qty"><button onclick="changeQty('m',-1)">−</button>
-
 <span id="m">0</span>
-
 <button onclick="changeQty('m',1)">+</button>
 
-</div></div></div><div id="cartBar">Place Order ₹<span id="total">0</span>
+</div></div></div><div id="cartBar" onclick="openCart()">View Cart ₹<span id="total">0</span>
 
-</div><nav><div>Home</div><div>Orders</div><div>Profile</div></nav><script>
+</div><nav><div>Home</div>
+<div onclick="openCart()">Cart</div>
+<div onclick="showOrders()">Orders</div></nav><div id="cartPage"><h2>Your Cart</h2><p>Total: ₹<span id="cartTotal">0</span></p><button onclick="openCheckout()">Checkout</button>
+
+</div><div id="checkout"><h2>Delivery Details</h2><input id="name" placeholder="Name">
+<input id="phone" placeholder="Mobile">
+<input id="address" placeholder="Address"><button onclick="getLocation()">Use My Location</button>
+
+<h3>Payment</h3><label><input type="radio" name="pay"> Cash</label><br>
+<label><input type="radio" name="pay"> UPI</label>
+
+<button onclick="confirmOrder()" style="margin-top:20px;padding:12px;width:100%;background:#e63946;color:white;border:none">Confirm Order
+
+</button></div><div id="success"><h1>✅ Order Confirmed</h1>
+<p>Your food is being prepared</p></div><script>
 
 /* loading */
 
@@ -146,14 +240,14 @@ document.getElementById("loading").style.display="none"
 
 },3000)
 
-/* slider */
+/* banner slider */
 
-let banners=[
+var banners=[
 "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d",
 "https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a"
 ]
 
-let i=0
+var i=0
 
 setInterval(()=>{
 
@@ -163,15 +257,23 @@ document.getElementById("banner").src=banners[i]
 
 },3000)
 
+/* sidebar */
+
+function toggleMenu(){
+
+document.getElementById("sidebar").classList.toggle("open")
+
+}
+
 /* cart */
 
 function changeQty(id,val){
 
-let el=document.getElementById(id)
+var el=document.getElementById(id)
 
-let q=parseInt(el.innerText)
+var q=parseInt(el.innerText)
 
-q+=val
+q=q+val
 
 if(q<0) q=0
 
@@ -183,144 +285,63 @@ updateCart()
 
 function updateCart(){
 
-let c=parseInt(document.getElementById("c").innerText)
+var c=parseInt(document.getElementById("c").innerText)
 
-let m=parseInt(document.getElementById("m").innerText)
+var m=parseInt(document.getElementById("m").innerText)
 
-let total=c*120+m*180
+var total=c*120+m*180
 
 document.getElementById("total").innerText=total
-
+document.getElementById("cartTotal").innerText=total
 document.getElementById("cartBadge").innerText=c+m
 
 }
 
-</script></body>
-</html>
-/* OPEN CHECKOUT */
+/* cart page */
 
-document.getElementById("cartBar").onclick = function(){
+function openCart(){
 
-document.getElementById("checkout").style.display="block"
-
-document.body.innerHTML += `
-
-<div id="checkout" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-padding:20px;
-overflow:auto;
-z-index:9999"><h2>Delivery Details</h2><input id="name" placeholder="Name" style="width:100%;padding:10px;margin-top:10px"><input id="phone" placeholder="Mobile Number" style="width:100%;padding:10px;margin-top:10px"><input id="address" placeholder="Address" style="width:100%;padding:10px;margin-top:10px"><button onclick="getLocation()" style="margin-top:10px">Use My Location</button>
-
-<h3>Payment Method</h3><label><input type="radio" name="pay"> Cash On Delivery</label><br>
-
-<label><input type="radio" name="pay"> UPI</label><br>
-
-<label><input type="radio" name="pay"> PhonePe</label><br>
-
-<button onclick="confirmOrder()" style="
-margin-top:20px;
-padding:12px;
-width:100%;
-background:#e63946;
-color:white;
-border:none;
-font-size:18px;
-border-radius:8px">
-
-Confirm Order
-
-</button></div>`
+document.getElementById("cartPage").style.display="block"
 
 }
 
-/* AUTO LOCATION */
+/* checkout */
+
+function openCheckout(){
+
+document.getElementById("checkout").style.display="block"
+
+}
+
+/* location */
 
 function getLocation(){
 
 navigator.geolocation.getCurrentPosition(function(pos){
 
-document.getElementById("address").value =
+document.getElementById("address").value=
 
-pos.coords.latitude + "," + pos.coords.longitude
+pos.coords.latitude+","+pos.coords.longitude
 
 })
 
 }
 
-/* ORDER CONFIRM */
+/* confirm */
 
 function confirmOrder(){
 
-let name=document.getElementById("name").value
-
-let order={
-
-name:name,
-
-time:new Date().toLocaleString()
+document.getElementById("success").style.display="flex"
 
 }
 
-let history=JSON.parse(localStorage.getItem("orders")||"[]")
-
-history.push(order)
-
-localStorage.setItem("orders",JSON.stringify(history))
-
-document.body.innerHTML += `
-
-<div style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-font-size:28px;
-z-index:9999">✅ Order Confirmed
-
-<p style="font-size:18px">Your food is being prepared</p></div>`
-
-}
-
-/* ORDER HISTORY */
+/* orders */
 
 function showOrders(){
 
-let history=JSON.parse(localStorage.getItem("orders")||"[]")
-
-let list=history.map(o=>"Order: "+o.time).join("<br>")
-
-document.body.innerHTML += `
-
-<div style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-padding:20px;
-overflow:auto;
-z-index:9999"><h2>Your Orders</h2>${list}
-
-</div>`
+alert("Order history coming soon")
 
 }
 
-/* NAVIGATION */
-
-document.querySelectorAll("nav div")[1].onclick=function(){
-
-showOrders()
-
-}
+</script></body>
+</html>
