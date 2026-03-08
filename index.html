@@ -13,7 +13,7 @@
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:#f3f3f3;
 }
 
 /* loading */
@@ -29,7 +29,7 @@ display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-z-index:9999;
+z-index:999;
 }
 
 .loader{
@@ -49,8 +49,8 @@ animation:spin 1s linear infinite;
 
 header{
 display:flex;
-align-items:center;
 justify-content:space-between;
+align-items:center;
 padding:10px;
 background:white;
 }
@@ -59,22 +59,25 @@ background:white;
 width:40px;
 }
 
+/* cart badge */
+
+#cartBadge{
+background:red;
+color:white;
+border-radius:50%;
+padding:3px 8px;
+font-size:12px;
+}
+
 /* slider */
 
-.slider{
+.slider img{
 width:100%;
-overflow:hidden;
+height:180px;
+object-fit:cover;
 }
 
-.slide{
-display:none;
-}
-
-.slide img{
-width:100%;
-}
-
-/* food */
+/* food cards */
 
 .menu{
 display:grid;
@@ -101,39 +104,25 @@ border-radius:10px;
 .qty{
 display:flex;
 justify-content:center;
-gap:5px;
-margin-top:5px;
+gap:6px;
 }
 
-/* cart badge */
+/* checkout */
 
-#cartBadge{
-background:red;
-color:white;
-border-radius:50%;
-padding:3px 7px;
-font-size:12px;
+#checkout{
+display:none;
+padding:15px;
 }
 
-/* sidebar */
-
-#sidebar{
-position:fixed;
-left:-250px;
-top:0;
-width:250px;
-height:100%;
-background:white;
-box-shadow:4px 0 10px rgba(0,0,0,0.2);
-padding:20px;
-transition:0.3s;
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:1px solid #ddd;
 }
 
-#sidebar.open{
-left:0;
-}
-
-/* success */
+/* order success */
 
 #success{
 position:fixed;
@@ -152,22 +141,22 @@ font-size:24px;
 /* map */
 
 #map{
-height:200px;
+height:220px;
 margin:10px;
 border-radius:10px;
 }
 
-/* nav */
+/* bottom button */
 
-nav{
+#orderBar{
 position:fixed;
 bottom:0;
 width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:10px;
-box-shadow:0 -4px 10px rgba(0,0,0,0.2);
+background:#e63946;
+color:white;
+text-align:center;
+padding:15px;
+font-size:18px;
 }
 
 </style>
@@ -189,31 +178,19 @@ box-shadow:0 -4px 10px rgba(0,0,0,0.2);
 
 </div>
 
-<!-- sidebar -->
-
-<div id="sidebar">
-
-<h2>Menu</h2>
-
-<p>Home</p>
-<p>Orders</p>
-<p>Profile</p>
-
-</div>
-
 <!-- success -->
 
 <div id="success">
 
-<h1>🎉 Order Confirmed</h1>
+<h1>✅ Order Confirmed</h1>
 
 <p>Your food is being prepared</p>
 
 </div>
 
-<header>
+<!-- header -->
 
-<button onclick="toggleMenu()">☰</button>
+<header>
 
 <img src="logo.png" class="logo">
 
@@ -225,17 +202,13 @@ box-shadow:0 -4px 10px rgba(0,0,0,0.2);
 
 <div class="slider">
 
-<div class="slide">
-<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
-</div>
-
-<div class="slide">
-<img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a">
-</div>
+<img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
 
 </div>
 
-<!-- food -->
+<!-- home -->
+
+<div id="home">
 
 <div class="menu">
 
@@ -281,19 +254,49 @@ box-shadow:0 -4px 10px rgba(0,0,0,0.2);
 
 </div>
 
-<h3 style="padding-left:10px;">Live Delivery Map</h3>
+</div>
+
+<!-- checkout -->
+
+<div id="checkout">
+
+<h2>Delivery Details</h2>
+
+<input id="name" placeholder="Your Name">
+
+<input id="phone" placeholder="Mobile Number">
+
+<input id="address" placeholder="Delivery Address">
+
+<button onclick="getLocation()">Use My Location</button>
+
+<h3>Payment Method</h3>
+
+<label><input type="radio" name="pay"> Cash On Delivery</label><br>
+<label><input type="radio" name="pay"> UPI</label><br>
+<label><input type="radio" name="pay"> PhonePe</label>
+
+<br><br>
+
+<button onclick="confirmOrder()">Confirm Order</button>
+
+</div>
+
+<h3 style="padding-left:10px;">Delivery Map</h3>
 
 <div id="map"></div>
 
-<nav>
+<div id="orderBar" onclick="openCheckout()">
 
-<div onclick="order()">Place Order</div>
+Place Order
 
-</nav>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
 <script>
+
+/* loading */
 
 setTimeout(()=>{
 document.getElementById("loading").style.display="none"
@@ -301,34 +304,19 @@ document.getElementById("loading").style.display="none"
 
 /* slider */
 
-let slides=document.querySelectorAll(".slide")
-let index=0
+let banners=[
+"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d",
+"https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a"
+]
 
-function showSlide(){
+let b=0
 
-slides.forEach(s=>s.style.display="none")
-
-slides[index].style.display="block"
-
-index=(index+1)%slides.length
-
-}
-
-setInterval(showSlide,3000)
-
-showSlide()
-
-/* sidebar */
-
-function toggleMenu(){
-
-document.getElementById("sidebar").classList.toggle("open")
-
-}
+setInterval(()=>{
+b=(b+1)%banners.length
+document.getElementById("banner").src=banners[b]
+},3000)
 
 /* quantity */
-
-let cart=0
 
 function changeQty(id,val){
 
@@ -354,28 +342,45 @@ document.querySelectorAll(".qty span").forEach(e=>{
 total+=parseInt(e.innerText)
 })
 
-cart=total
-
-document.getElementById("cartBadge").innerText=cart
+document.getElementById("cartBadge").innerText=total
 
 }
 
-/* order */
+/* checkout */
 
-function order(){
+function openCheckout(){
 
-if(cart==0){
+document.getElementById("home").style.display="none"
 
-alert("Cart empty")
-
-return
+document.getElementById("checkout").style.display="block"
 
 }
+
+/* location */
+
+function getLocation(){
+
+navigator.geolocation.getCurrentPosition(pos=>{
+
+let lat=pos.coords.latitude
+let lon=pos.coords.longitude
+
+document.getElementById("address").value="Lat:"+lat+" Long:"+lon
+
+})
+
+}
+
+/* confirm */
+
+function confirmOrder(){
 
 document.getElementById("success").style.display="flex"
 
 setTimeout(()=>{
+
 document.getElementById("success").style.display="none"
+
 },4000)
 
 }
@@ -386,7 +391,7 @@ var map=L.map('map').setView([20.84,82.57],13)
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
 
-L.marker([20.84,82.57]).addTo(map).bindPopup("Delivery Location")
+L.marker([20.84,82.57]).addTo(map)
 
 </script>
 
