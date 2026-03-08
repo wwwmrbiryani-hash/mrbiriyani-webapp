@@ -197,3 +197,130 @@ document.getElementById("cartBadge").innerText=c+m
 
 </script></body>
 </html>
+/* OPEN CHECKOUT */
+
+document.getElementById("cartBar").onclick = function(){
+
+document.getElementById("checkout").style.display="block"
+
+document.body.innerHTML += `
+
+<div id="checkout" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+padding:20px;
+overflow:auto;
+z-index:9999"><h2>Delivery Details</h2><input id="name" placeholder="Name" style="width:100%;padding:10px;margin-top:10px"><input id="phone" placeholder="Mobile Number" style="width:100%;padding:10px;margin-top:10px"><input id="address" placeholder="Address" style="width:100%;padding:10px;margin-top:10px"><button onclick="getLocation()" style="margin-top:10px">Use My Location</button>
+
+<h3>Payment Method</h3><label><input type="radio" name="pay"> Cash On Delivery</label><br>
+
+<label><input type="radio" name="pay"> UPI</label><br>
+
+<label><input type="radio" name="pay"> PhonePe</label><br>
+
+<button onclick="confirmOrder()" style="
+margin-top:20px;
+padding:12px;
+width:100%;
+background:#e63946;
+color:white;
+border:none;
+font-size:18px;
+border-radius:8px">
+
+Confirm Order
+
+</button></div>`
+
+}
+
+/* AUTO LOCATION */
+
+function getLocation(){
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+document.getElementById("address").value =
+
+pos.coords.latitude + "," + pos.coords.longitude
+
+})
+
+}
+
+/* ORDER CONFIRM */
+
+function confirmOrder(){
+
+let name=document.getElementById("name").value
+
+let order={
+
+name:name,
+
+time:new Date().toLocaleString()
+
+}
+
+let history=JSON.parse(localStorage.getItem("orders")||"[]")
+
+history.push(order)
+
+localStorage.setItem("orders",JSON.stringify(history))
+
+document.body.innerHTML += `
+
+<div style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+font-size:28px;
+z-index:9999">✅ Order Confirmed
+
+<p style="font-size:18px">Your food is being prepared</p></div>`
+
+}
+
+/* ORDER HISTORY */
+
+function showOrders(){
+
+let history=JSON.parse(localStorage.getItem("orders")||"[]")
+
+let list=history.map(o=>"Order: "+o.time).join("<br>")
+
+document.body.innerHTML += `
+
+<div style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+padding:20px;
+overflow:auto;
+z-index:9999"><h2>Your Orders</h2>${list}
+
+</div>`
+
+}
+
+/* NAVIGATION */
+
+document.querySelectorAll("nav div")[1].onclick=function(){
+
+showOrders()
+
+}
