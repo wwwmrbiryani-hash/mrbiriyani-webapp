@@ -383,3 +383,93 @@ show("orders")
 
 </body>
 </html>
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+/* loading screen */
+
+setTimeout(function(){
+document.getElementById("loading").style.display="none"
+},3000)
+
+})
+
+let cart=[]
+let history=[]
+
+function show(page){
+
+document.querySelectorAll(".screen").forEach(function(screen){
+screen.style.display="none"
+})
+
+document.getElementById(page).style.display="block"
+
+}
+
+/* add cart */
+
+function addCart(name,price){
+
+cart.push({name:name,price:price})
+
+updateCart()
+
+}
+
+/* update cart */
+
+function updateCart(){
+
+let html=""
+let total=0
+
+cart.forEach(function(item){
+
+html+=`<p>${item.name} - ₹${item.price}</p>`
+
+total+=item.price
+
+})
+
+document.getElementById("cartItems").innerHTML=html
+
+document.getElementById("total").innerText="Total ₹"+total
+
+}
+
+/* place order */
+
+function placeOrder(){
+
+if(cart.length==0){
+alert("Cart empty")
+return
+}
+
+let id="MR"+Math.floor(Math.random()*9999)
+
+document.getElementById("success").style.display="flex"
+
+document.getElementById("orderID").innerText="Order ID "+id
+
+history.push(id)
+
+document.getElementById("history").innerHTML+=`<p>Order ${id}</p>`
+
+setTimeout(function(){
+
+document.getElementById("success").style.display="none"
+
+cart=[]
+
+updateCart()
+
+show("orders")
+
+},4000)
+
+}
+
+  </script>
