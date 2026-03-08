@@ -6,17 +6,173 @@
 
 <title>MR Biriyani</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
 
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f5f5f5;
+}
+
+/* loading screen */
+
+#loading{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.loader{
+border:6px solid #eee;
+border-top:6px solid #e63946;
+border-radius:50%;
+width:40px;
+height:40px;
+animation:spin 1s linear infinite;
+margin-top:20px;
+}
+
+@keyframes spin{
+100%{transform:rotate(360deg)}
+}
+
+/* header */
+
+header{
+display:flex;
+justify-content:space-between;
+padding:10px;
+background:white;
+align-items:center;
+}
+
+.logo{
+width:40px;
+}
+
+.search{
+padding:8px;
+border-radius:20px;
+border:1px solid #ddd;
+width:60%;
+}
+
+/* banner */
+
+.offer{
+background:#e63946;
+color:white;
+text-align:center;
+padding:8px;
+}
+
+/* menu */
+
+.menu{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:15px;
+padding:15px;
+}
+
+.card{
+background:white;
+padding:10px;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+button{
+background:#e63946;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:8px;
+margin-top:8px;
+}
+
+/* cart */
+
+.cart{
+background:white;
+margin:15px;
+padding:15px;
+border-radius:12px;
+}
+
+/* screens */
+
+.screen{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+/* nav */
+
+nav{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:10px;
+box-shadow:0 -4px 10px rgba(0,0,0,0.2);
+}
+
+/* success animation */
+
+#success{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+font-size:24px;
+animation:fade 0.5s;
+}
+
+@keyframes fade{
+from{opacity:0}
+to{opacity:1}
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="loading">
+<!-- loading -->
 
-<img src="images/logo.png" class="bigLogo">
+<div id="loading">
 
-<h1>MR Biriyani</h1>
+<img src="logo.png" width="100">
+
+<h2>MR Biriyani</h2>
 
 <div class="loader"></div>
 
@@ -24,13 +180,204 @@
 
 </div>
 
+<!-- success -->
+
+<div id="success">
+
+<h1>🎉 Order Confirmed</h1>
+
+<p id="orderID"></p>
+
+<p>Preparing your food...</p>
+
+</div>
+
+<!-- header -->
+
+<header>
+
+<img src="logo.png" class="logo">
+
+<input class="search" placeholder="Search food">
+
+</header>
+
+<div class="offer">
+
+🔥 Patnagarh Special — Free Delivery Today
+
+</div>
+
+<!-- home -->
+
+<div id="home" class="screen active">
+
+<h2 style="padding-left:15px;">MR Biriyani</h2>
+
+<div class="menu">
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+
+<h3>Chicken Biryani</h3>
+
+<p>₹120</p>
+
+<button onclick="addCart('Chicken',120)">Add</button>
+
+</div>
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a">
+
+<h3>Matka Biryani</h3>
+
+<p>₹180</p>
+
+<button onclick="addCart('Matka',180)">Add</button>
+
+</div>
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0">
+
+<h3>Egg Biryani</h3>
+
+<p>₹90</p>
+
+<button onclick="addCart('Egg',90)">Add</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- cart -->
+
+<div id="cart" class="screen">
+
+<div class="cart">
+
+<h2>Your Cart</h2>
+
+<div id="cartItems"></div>
+
+<h3 id="total">Total ₹0</h3>
+
+<h3>Payment</h3>
+
+<label><input type="radio"> Cash</label>
+<label><input type="radio"> UPI</label>
+<label><input type="radio"> PhonePe</label>
+
+<br><br>
+
+<input id="name" placeholder="Name"><br><br>
+
+<input id="phone" placeholder="Phone"><br><br>
+
+<input id="address" placeholder="Address"><br><br>
+
+<button onclick="placeOrder()">Place Order</button>
+
+</div>
+
+</div>
+
+<!-- orders -->
+
+<div id="orders" class="screen">
+
+<h2 style="padding-left:15px;">Order History</h2>
+
+<div id="history" style="padding:15px;"></div>
+
+</div>
+
+<!-- nav -->
+
+<nav>
+
+<div onclick="show('home')">🏠 Home</div>
+
+<div onclick="show('cart')">🛒 Cart</div>
+
+<div onclick="show('orders')">📦 Orders</div>
+
+</nav>
+
 <script>
+
+let cart=[]
+let history=[]
+
+setTimeout(()=>{
+document.getElementById("loading").style.display="none"
+},3000)
+
+function show(id){
+
+document.querySelectorAll(".screen").forEach(s=>{
+s.classList.remove("active")
+})
+
+document.getElementById(id).classList.add("active")
+
+}
+
+function addCart(name,price){
+
+cart.push({name,price})
+
+updateCart()
+
+}
+
+function updateCart(){
+
+let html=""
+let total=0
+
+cart.forEach(item=>{
+html+=`<p>${item.name} ₹${item.price}</p>`
+total+=item.price
+})
+
+document.getElementById("cartItems").innerHTML=html
+
+document.getElementById("total").innerText="Total ₹"+total
+
+}
+
+function placeOrder(){
+
+let id="MR"+Math.floor(Math.random()*10000)
+
+document.getElementById("orderID").innerText="Order ID "+id
+
+history.push(id)
+
+document.getElementById("history").innerHTML+=`<p>Order ${id}</p>`
+
+document.getElementById("success").style.display="flex"
 
 setTimeout(()=>{
 
-window.location="pages/home.html"
+document.getElementById("success").style.display="none"
+
+cart=[]
+
+updateCart()
+
+show("orders")
 
 },4000)
+
+}
 
 </script>
 
