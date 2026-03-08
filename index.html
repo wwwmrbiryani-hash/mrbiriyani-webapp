@@ -1,5 +1,7 @@
 <!DOCTYPE html><html>
-<head><meta name="viewport" content="width=device-width, initial-scale=1"><title>MR Biriyani</title><style>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MR Biriyani</title><style>
 
 body{
 margin:0;
@@ -7,7 +9,7 @@ font-family:Arial;
 background:#f5f5f5;
 }
 
-/* loading screen */
+/* LOADING */
 
 #loading{
 position:fixed;
@@ -24,7 +26,7 @@ z-index:999;
 }
 
 #loading img{
-width:100px;
+width:110px;
 margin-bottom:10px;
 }
 
@@ -41,7 +43,7 @@ animation:spin 1s linear infinite;
 100%{transform:rotate(360deg)}
 }
 
-/* header */
+/* HEADER */
 
 header{
 text-align:center;
@@ -50,17 +52,17 @@ padding:15px;
 }
 
 .welcome{
-font-size:16px;
 color:#e63946;
-animation:welcomeAnim 2s infinite alternate;
+font-weight:bold;
+animation:fade 2s infinite alternate;
 }
 
-@keyframes welcomeAnim{
-from{opacity:0.3}
+@keyframes fade{
+from{opacity:0.4}
 to{opacity:1}
 }
 
-/* ads slider */
+/* SLIDER */
 
 .slider img{
 width:100%;
@@ -68,7 +70,7 @@ height:180px;
 object-fit:cover;
 }
 
-/* food cards */
+/* MENU */
 
 .menu{
 display:grid;
@@ -83,6 +85,11 @@ border-radius:10px;
 padding:10px;
 text-align:center;
 box-shadow:0 3px 10px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.05);
 }
 
 .card img{
@@ -90,7 +97,7 @@ width:100%;
 border-radius:10px;
 }
 
-/* quantity */
+/* QTY */
 
 .qty{
 display:flex;
@@ -104,7 +111,7 @@ width:30px;
 height:30px;
 }
 
-/* cart badge */
+/* CART BADGE */
 
 #cartBadge{
 position:fixed;
@@ -116,7 +123,7 @@ padding:6px 10px;
 border-radius:50%;
 }
 
-/* order bar */
+/* ORDER BAR */
 
 #orderBar{
 position:fixed;
@@ -129,7 +136,7 @@ text-align:center;
 font-size:18px;
 }
 
-/* bottom nav */
+/* NAV */
 
 nav{
 position:fixed;
@@ -142,9 +149,9 @@ padding:10px;
 box-shadow:0 -3px 10px rgba(0,0,0,0.2);
 }
 
-/* checkout */
+/* SCREENS */
 
-#checkout{
+#checkout,#profile{
 display:none;
 padding:15px;
 }
@@ -157,7 +164,7 @@ border-radius:8px;
 border:1px solid #ccc;
 }
 
-/* success */
+/* SUCCESS */
 
 #success{
 position:fixed;
@@ -171,7 +178,12 @@ align-items:center;
 justify-content:center;
 flex-direction:column;
 font-size:26px;
-z-index:2000;
+animation:pop 0.5s;
+}
+
+@keyframes pop{
+0%{transform:scale(0.5);opacity:0}
+100%{transform:scale(1);opacity:1}
 }
 
 button{
@@ -183,7 +195,7 @@ color:white;
 border-radius:8px;
 }
 
-</style></head><body><!-- loading --><div id="loading"><img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png"><h2>MR Biriyani</h2><div class="loader"></div></div><header><h2>MR Biriyani</h2><p class="welcome">Welcome to Patnagarh</p></header><div id="cartBadge">0</div><!-- ads slider --><div class="slider"><img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"></div><div id="home"><div class="menu"><div class="card"><img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"><h3>Chicken Biryani</h3><p>₹120</p><div class="qty"><button onclick="changeQty('c',-1)">−</button>
+</style></head><body><!-- LOADING --><div id="loading"><img src="https://cdn-icons-png.flaticon.com/512/5787/5787016.png"><h2>MR Biriyani</h2><div class="loader"></div></div><header><h2>MR Biriyani</h2><p class="welcome">Welcome to Patnagarh</p></header><div id="cartBadge">0</div><!-- BANNER --><div class="slider"><img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"></div><!-- HOME --><div id="home"><div class="menu"><div class="card"><img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"><h3>Chicken Biryani</h3><p>₹120</p><div class="qty"><button onclick="changeQty('c',-1)">−</button>
 
 <span id="c">0</span>
 
@@ -195,19 +207,21 @@ border-radius:8px;
 
 <button onclick="changeQty('m',1)">+</button>
 
-</div></div></div></div><!-- checkout --><div id="checkout"><h2>Delivery Details</h2><input id="name" placeholder="Name"><input id="phone" placeholder="Mobile Number"><input id="address" placeholder="Address"><h3>Payment Method</h3><label><input type="radio" name="pay">Cash</label><br>
+</div></div></div></div><!-- CHECKOUT --><div id="checkout"><h2>Delivery Details</h2><input id="name" placeholder="Name"><input id="phone" placeholder="Mobile Number"><input id="address" placeholder="Address"><button onclick="getLocation()">Use My Location</button>
 
-<label><input type="radio" name="pay">UPI</label>
+<h3>Payment Method</h3><label><input type="radio" name="pay"> Cash</label><br>
+
+<label><input type="radio" name="pay"> UPI</label>
 
 <button onclick="confirmOrder()">Confirm Order</button>
 
-</div><!-- success --><div id="success"><h1>✅ Order Confirmed</h1><p>Your food is being prepared</p><button onclick="goHome()">Back Home</button>
+</div><!-- PROFILE --><div id="profile"><h2>Your Profile</h2><p>Name: Guest User</p><p>City: Patnagarh</p></div><!-- SUCCESS --><div id="success"><h1>✅ Order Confirmed</h1><p>Your food is being prepared</p><button onclick="goHome()">Back Home</button>
 
-</div><div id="orderBar" onclick="openCheckout()">Place Order ₹<span id="total">0</span>
+</div><!-- ORDER BAR --><div id="orderBar" onclick="openCheckout()">Place Order ₹<span id="total">0</span>
 
-</div><nav><div onclick="goHome()">Home</div><div onclick="showOrders()">Orders</div><div>Profile</div></nav><script>
+</div><!-- NAV --><nav><div onclick="showHome()">Home</div><div onclick="showOrders()">Orders</div><div onclick="showProfile()">Profile</div></nav><script>
 
-/* loading */
+/* LOADING */
 
 setTimeout(()=>{
 
@@ -215,7 +229,7 @@ document.getElementById("loading").style.display="none"
 
 },2500)
 
-/* banner slider */
+/* BANNER */
 
 let banners=[
 
@@ -235,7 +249,7 @@ document.getElementById("banner").src=banners[b]
 
 },3000)
 
-/* cart */
+/* CART */
 
 function changeQty(id,val){
 
@@ -267,17 +281,46 @@ document.getElementById("cartBadge").innerText=c+m
 
 }
 
-/* checkout */
+/* CHECKOUT */
 
 function openCheckout(){
 
 document.getElementById("home").style.display="none"
 
+document.getElementById("profile").style.display="none"
+
 document.getElementById("checkout").style.display="block"
 
 }
 
-/* confirm */
+/* LOCATION */
+
+function getLocation(){
+
+if(navigator.geolocation){
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+let lat=position.coords.latitude
+let lon=position.coords.longitude
+
+fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("address").value=data.display_name
+})
+
+})
+
+}else{
+
+alert("Location not supported")
+
+}
+
+}
+
+/* CONFIRM */
 
 function confirmOrder(){
 
@@ -293,17 +336,37 @@ document.getElementById("success").style.display="flex"
 
 }
 
-/* orders */
+/* ORDERS */
 
 function showOrders(){
 
 let history=JSON.parse(localStorage.getItem("orders")||"[]")
 
-alert("Orders:\n"+history.map(o=>o.time).join("\n"))
+alert("Your Orders:\n\n"+history.map(o=>o.time).join("\n"))
 
 }
 
-/* home */
+/* NAVIGATION */
+
+function showHome(){
+
+document.getElementById("home").style.display="block"
+
+document.getElementById("checkout").style.display="none"
+
+document.getElementById("profile").style.display="none"
+
+}
+
+function showProfile(){
+
+document.getElementById("home").style.display="none"
+
+document.getElementById("checkout").style.display="none"
+
+document.getElementById("profile").style.display="block"
+
+}
 
 function goHome(){
 
