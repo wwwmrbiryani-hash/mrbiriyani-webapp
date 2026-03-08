@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Orders</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h1>Your Cart</h1>
+
+<div class="orderBox">
+
+<input placeholder="Your Name">
+
+<input placeholder="Phone Number">
+
+<input id="address" placeholder="Delivery Address">
+
+<button onclick="getLocation()">
+
+📍 Use My Location
+
+</button>
+
+<button onclick="confirmOrder()">
+
+Place Order
+
+</button>
+
+</div>
+
+<div id="success" class="success">
+
+🎉 Order Confirmed
+
+</div>
+
+<script>
+
+function confirmOrder(){
+
+document.getElementById("success").style.display="flex"
+
+setTimeout(()=>{
+
+document.getElementById("success").style.display="none"
+
+},3000)
+
+}
+
+function getLocation(){
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+document.getElementById("address").value =
+
+pos.coords.latitude + "," + pos.coords.longitude
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
