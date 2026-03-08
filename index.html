@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,9 +15,17 @@ font-family:Arial;
 margin:0;
 background:#fafafa;
 text-align:center;
+transition:0.3s;
 }
 
-/* LOADING */
+/* DARK MODE */
+
+.dark{
+background:#111;
+color:white;
+}
+
+/* LOADER */
 
 #loader{
 position:fixed;
@@ -60,14 +69,26 @@ background:#e63946;
 color:white;
 padding:10px;
 font-weight:bold;
-animation:slide 6s infinite;
 }
 
-/* TITLE */
-
-h1{
-color:#e63946;
+.scrolling{
+overflow:hidden;
+white-space:nowrap;
+background:white;
+padding:10px;
 }
+
+.scrolling span{
+display:inline-block;
+animation:scroll 10s linear infinite;
+}
+
+@keyframes scroll{
+0%{transform:translateX(100%)}
+100%{transform:translateX(-100%)}
+}
+
+/* MENU */
 
 .menu{
 display:grid;
@@ -75,8 +96,6 @@ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
 gap:20px;
 padding:20px;
 }
-
-/* CARD */
 
 .card{
 background:white;
@@ -122,7 +141,7 @@ border-radius:8px;
 border:1px solid #ddd;
 }
 
-/* FLOAT */
+/* FLOAT BUTTON */
 
 .float{
 position:fixed;
@@ -132,6 +151,14 @@ background:#e63946;
 color:white;
 padding:15px;
 border-radius:30px;
+}
+
+/* MAP */
+
+#map{
+height:250px;
+margin:20px;
+border-radius:10px;
 }
 
 /* BOTTOM NAV */
@@ -147,24 +174,6 @@ padding:10px;
 box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 }
 
-/* MAP */
-
-#map{
-height:250px;
-margin:20px;
-border-radius:10px;
-}
-
-/* ANIMATION */
-
-@keyframes slide{
-
-0%{opacity:1}
-50%{opacity:0.6}
-100%{opacity:1}
-
-}
-
 </style>
 
 </head>
@@ -174,11 +183,20 @@ border-radius:10px;
 <div id="loader">🍗 Loading MR Biriyani...</div>
 
 <div class="header">
+
 <img class="logo" src="logo.png">
+
 <input class="search" placeholder="Search food">
+
+<button onclick="toggleTheme()">🌙</button>
+
 </div>
 
 <div class="banner">🔥 Patnagarh Special — Free Delivery Today</div>
+
+<div class="scrolling">
+<span>🍗 Chicken Biryani Offer ₹99 | 🥘 Matka Biryani Special | 🥚 Egg Biryani Combo</span>
+</div>
 
 <h1>MR Biriyani</h1>
 <p>Patnagarh's Premium Biryani</p>
@@ -228,7 +246,7 @@ border-radius:10px;
 
 </div>
 
-<h2>Delivery Tracking</h2>
+<h2>Your Live Location</h2>
 
 <div id="map"></div>
 
@@ -244,18 +262,23 @@ border-radius:10px;
 
 <script>
 
+/* LOADER */
+
 setTimeout(()=>{
 document.getElementById("loader").style.display="none";
 },2000);
 
-let total = 0;
+/* CART */
+
+let total=0;
 
 function addToCart(item,price){
 
-let cart = document.getElementById("cart");
+let cart=document.getElementById("cart");
 
-let li = document.createElement("li");
-li.textContent = item+" ₹"+price;
+let li=document.createElement("li");
+
+li.textContent=item+" ₹"+price;
 
 cart.appendChild(li);
 
@@ -264,6 +287,8 @@ total+=price;
 document.getElementById("total").textContent=total;
 
 }
+
+/* ORDER */
 
 function placeOrder(){
 
@@ -274,41 +299,48 @@ alert("Enter name");
 return;
 }
 
-let orders=JSON.parse(localStorage.getItem("orders"))||[];
-
-orders.push({total:total});
-
-localStorage.setItem("orders",JSON.stringify(orders));
-
-document.body.innerHTML="<h1>🎉 Order Placed!</h1><p>Your Biryani is cooking in Patnagarh.</p>";
+alert("🎉 Order Placed Successfully!");
 
 }
 
-function showHistory(){
+/* DARK MODE */
 
-let orders=JSON.parse(localStorage.getItem("orders"))||[];
-
-let text="<h2>Order History</h2>";
-
-orders.forEach(o=>{
-text+="<p>Order ₹"+o.total+"</p>";
-});
-
-document.body.innerHTML=text;
-
+function toggleTheme(){
+document.body.classList.toggle("dark");
 }
+
+/* FLOATING NOTIFICATION */
+
+setInterval(()=>{
+alert("🔥 New order received in Patnagarh!");
+},30000);
 
 /* MAP */
 
-var map = L.map('map').setView([20.708,83.146], 13);
+var map = L.map('map').setView([20.708,83.146],13);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-L.marker([20.708,83.146]).addTo(map)
-.bindPopup("Delivery Rider")
+/* CUSTOMER GPS */
+
+if(navigator.geolocation){
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+var lat = position.coords.latitude;
+var lon = position.coords.longitude;
+
+map.setView([lat,lon],15);
+
+L.marker([lat,lon]).addTo(map)
+.bindPopup("📍 Your Location")
 .openPopup();
+
+});
+
+}
 
 </script>
 
 </body>
-  </html>
+</html>
