@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="../style.css">
+
+</head>
+
+<body>
+
+<h2>Your Cart</h2>
+
+<div id="cartItems"></div>
+
+<h3 id="totalPrice">Total ₹0</h3>
+
+<h3>Payment Method</h3>
+
+<label><input type="radio"> Cash On Delivery</label>
+
+<label><input type="radio"> UPI</label>
+
+<label><input type="radio"> PhonePe</label>
+
+<label><input type="radio"> Google Pay</label>
+
+<br><br>
+
+<input id="name" placeholder="Your Name">
+
+<input id="phone" placeholder="Phone Number">
+
+<input id="address" placeholder="Delivery Address">
+
+<br>
+
+<button onclick="getLocation()">📍 Use My Location</button>
+
+<button onclick="placeOrder()">Place Order</button>
+
+<div id="map"></div>
+
+<nav>
+
+<a href="home.html">🏠 Home</a>
+
+<a href="cart.html">🛒 Cart</a>
+
+<a href="orders.html">📦 Orders</a>
+
+<a href="profile.html">👤 Profile</a>
+
+</nav>
+
+<script src="../app.js"></script>
+
+</body>
+</html>
