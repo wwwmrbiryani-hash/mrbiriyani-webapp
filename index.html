@@ -16,7 +16,7 @@ font-family:Arial;
 background:#f5f5f5;
 }
 
-/* loading screen */
+/* loading */
 
 #loading{
 position:fixed;
@@ -27,19 +27,18 @@ height:100%;
 background:white;
 display:flex;
 flex-direction:column;
-justify-content:center;
 align-items:center;
+justify-content:center;
 z-index:9999;
 }
 
 .loader{
-border:6px solid #eee;
-border-top:6px solid #e63946;
+border:5px solid #eee;
+border-top:5px solid red;
 border-radius:50%;
 width:40px;
 height:40px;
 animation:spin 1s linear infinite;
-margin-top:20px;
 }
 
 @keyframes spin{
@@ -50,45 +49,44 @@ margin-top:20px;
 
 header{
 display:flex;
+align-items:center;
 justify-content:space-between;
 padding:10px;
 background:white;
-align-items:center;
 }
 
 .logo{
 width:40px;
 }
 
-.search{
-padding:8px;
-border-radius:20px;
-border:1px solid #ddd;
-width:60%;
+/* slider */
+
+.slider{
+width:100%;
+overflow:hidden;
 }
 
-/* banner */
-
-.offer{
-background:#e63946;
-color:white;
-text-align:center;
-padding:8px;
+.slide{
+display:none;
 }
 
-/* menu */
+.slide img{
+width:100%;
+}
+
+/* food */
 
 .menu{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:15px;
-padding:15px;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:10px;
+padding:10px;
 }
 
 .card{
 background:white;
 padding:10px;
-border-radius:12px;
+border-radius:10px;
 box-shadow:0 4px 10px rgba(0,0,0,0.1);
 text-align:center;
 }
@@ -98,32 +96,65 @@ width:100%;
 border-radius:10px;
 }
 
-button{
-background:#e63946;
+/* quantity */
+
+.qty{
+display:flex;
+justify-content:center;
+gap:5px;
+margin-top:5px;
+}
+
+/* cart badge */
+
+#cartBadge{
+background:red;
 color:white;
-border:none;
-padding:8px 12px;
-border-radius:8px;
-margin-top:8px;
+border-radius:50%;
+padding:3px 7px;
+font-size:12px;
 }
 
-/* cart */
+/* sidebar */
 
-.cart{
+#sidebar{
+position:fixed;
+left:-250px;
+top:0;
+width:250px;
+height:100%;
 background:white;
-margin:15px;
-padding:15px;
-border-radius:12px;
+box-shadow:4px 0 10px rgba(0,0,0,0.2);
+padding:20px;
+transition:0.3s;
 }
 
-/* screens */
+#sidebar.open{
+left:0;
+}
 
-.screen{
+/* success */
+
+#success{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
 display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+font-size:24px;
 }
 
-.active{
-display:block;
+/* map */
+
+#map{
+height:200px;
+margin:10px;
+border-radius:10px;
 }
 
 /* nav */
@@ -139,28 +170,6 @@ padding:10px;
 box-shadow:0 -4px 10px rgba(0,0,0,0.2);
 }
 
-/* success animation */
-
-#success{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-display:none;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-font-size:24px;
-animation:fade 0.5s;
-}
-
-@keyframes fade{
-from{opacity:0}
-to{opacity:1}
-}
-
 </style>
 </head>
 
@@ -170,7 +179,7 @@ to{opacity:1}
 
 <div id="loading">
 
-<img src="logo.png" width="100">
+<img src="logo.png" width="90">
 
 <h2>MR Biriyani</h2>
 
@@ -180,39 +189,53 @@ to{opacity:1}
 
 </div>
 
+<!-- sidebar -->
+
+<div id="sidebar">
+
+<h2>Menu</h2>
+
+<p>Home</p>
+<p>Orders</p>
+<p>Profile</p>
+
+</div>
+
 <!-- success -->
 
 <div id="success">
 
 <h1>🎉 Order Confirmed</h1>
 
-<p id="orderID"></p>
-
-<p>Preparing your food...</p>
+<p>Your food is being prepared</p>
 
 </div>
-
-<!-- header -->
 
 <header>
 
+<button onclick="toggleMenu()">☰</button>
+
 <img src="logo.png" class="logo">
 
-<input class="search" placeholder="Search food">
+<div>Cart <span id="cartBadge">0</span></div>
 
 </header>
 
-<div class="offer">
+<!-- slider -->
 
-🔥 Patnagarh Special — Free Delivery Today
+<div class="slider">
+
+<div class="slide">
+<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+</div>
+
+<div class="slide">
+<img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a">
+</div>
 
 </div>
 
-<!-- home -->
-
-<div id="home" class="screen active">
-
-<h2 style="padding-left:15px;">MR Biriyani</h2>
+<!-- food -->
 
 <div class="menu">
 
@@ -224,7 +247,15 @@ to{opacity:1}
 
 <p>₹120</p>
 
-<button onclick="addCart('Chicken',120)">Add</button>
+<div class="qty">
+
+<button onclick="changeQty('chicken',-1)">−</button>
+
+<span id="chicken">0</span>
+
+<button onclick="changeQty('chicken',1)">+</button>
+
+</div>
 
 </div>
 
@@ -236,19 +267,13 @@ to{opacity:1}
 
 <p>₹180</p>
 
-<button onclick="addCart('Matka',180)">Add</button>
+<div class="qty">
 
-</div>
+<button onclick="changeQty('matka',-1)">−</button>
 
-<div class="card">
+<span id="matka">0</span>
 
-<img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0">
-
-<h3>Egg Biryani</h3>
-
-<p>₹90</p>
-
-<button onclick="addCart('Egg',90)">Add</button>
+<button onclick="changeQty('matka',1)">+</button>
 
 </div>
 
@@ -256,82 +281,66 @@ to{opacity:1}
 
 </div>
 
-<!-- cart -->
+<h3 style="padding-left:10px;">Live Delivery Map</h3>
 
-<div id="cart" class="screen">
-
-<div class="cart">
-
-<h2>Your Cart</h2>
-
-<div id="cartItems"></div>
-
-<h3 id="total">Total ₹0</h3>
-
-<h3>Payment</h3>
-
-<label><input type="radio"> Cash</label>
-<label><input type="radio"> UPI</label>
-<label><input type="radio"> PhonePe</label>
-
-<br><br>
-
-<input id="name" placeholder="Name"><br><br>
-
-<input id="phone" placeholder="Phone"><br><br>
-
-<input id="address" placeholder="Address"><br><br>
-
-<button onclick="placeOrder()">Place Order</button>
-
-</div>
-
-</div>
-
-<!-- orders -->
-
-<div id="orders" class="screen">
-
-<h2 style="padding-left:15px;">Order History</h2>
-
-<div id="history" style="padding:15px;"></div>
-
-</div>
-
-<!-- nav -->
+<div id="map"></div>
 
 <nav>
 
-<div onclick="show('home')">🏠 Home</div>
-
-<div onclick="show('cart')">🛒 Cart</div>
-
-<div onclick="show('orders')">📦 Orders</div>
+<div onclick="order()">Place Order</div>
 
 </nav>
 
-<script>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-let cart=[]
-let history=[]
+<script>
 
 setTimeout(()=>{
 document.getElementById("loading").style.display="none"
 },3000)
 
-function show(id){
+/* slider */
 
-document.querySelectorAll(".screen").forEach(s=>{
-s.classList.remove("active")
-})
+let slides=document.querySelectorAll(".slide")
+let index=0
 
-document.getElementById(id).classList.add("active")
+function showSlide(){
+
+slides.forEach(s=>s.style.display="none")
+
+slides[index].style.display="block"
+
+index=(index+1)%slides.length
 
 }
 
-function addCart(name,price){
+setInterval(showSlide,3000)
 
-cart.push({name,price})
+showSlide()
+
+/* sidebar */
+
+function toggleMenu(){
+
+document.getElementById("sidebar").classList.toggle("open")
+
+}
+
+/* quantity */
+
+let cart=0
+
+function changeQty(id,val){
+
+let el=document.getElementById(id)
+
+let q=parseInt(el.innerText)
+
+q+=val
+
+if(q<0) q=0
+
+el.innerText=q
 
 updateCart()
 
@@ -339,137 +348,47 @@ updateCart()
 
 function updateCart(){
 
-let html=""
 let total=0
 
-cart.forEach(item=>{
-html+=`<p>${item.name} ₹${item.price}</p>`
-total+=item.price
+document.querySelectorAll(".qty span").forEach(e=>{
+total+=parseInt(e.innerText)
 })
 
-document.getElementById("cartItems").innerHTML=html
+cart=total
 
-document.getElementById("total").innerText="Total ₹"+total
+document.getElementById("cartBadge").innerText=cart
 
 }
 
-function placeOrder(){
+/* order */
 
-let id="MR"+Math.floor(Math.random()*10000)
+function order(){
 
-document.getElementById("orderID").innerText="Order ID "+id
+if(cart==0){
 
-history.push(id)
+alert("Cart empty")
 
-document.getElementById("history").innerHTML+=`<p>Order ${id}</p>`
+return
+
+}
 
 document.getElementById("success").style.display="flex"
 
 setTimeout(()=>{
-
 document.getElementById("success").style.display="none"
-
-cart=[]
-
-updateCart()
-
-show("orders")
-
 },4000)
 
 }
+
+/* map */
+
+var map=L.map('map').setView([20.84,82.57],13)
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
+
+L.marker([20.84,82.57]).addTo(map).bindPopup("Delivery Location")
 
 </script>
 
 </body>
 </html>
-<script>
-
-document.addEventListener("DOMContentLoaded", function(){
-
-/* loading screen */
-
-setTimeout(function(){
-document.getElementById("loading").style.display="none"
-},3000)
-
-})
-
-let cart=[]
-let history=[]
-
-function show(page){
-
-document.querySelectorAll(".screen").forEach(function(screen){
-screen.style.display="none"
-})
-
-document.getElementById(page).style.display="block"
-
-}
-
-/* add cart */
-
-function addCart(name,price){
-
-cart.push({name:name,price:price})
-
-updateCart()
-
-}
-
-/* update cart */
-
-function updateCart(){
-
-let html=""
-let total=0
-
-cart.forEach(function(item){
-
-html+=`<p>${item.name} - ₹${item.price}</p>`
-
-total+=item.price
-
-})
-
-document.getElementById("cartItems").innerHTML=html
-
-document.getElementById("total").innerText="Total ₹"+total
-
-}
-
-/* place order */
-
-function placeOrder(){
-
-if(cart.length==0){
-alert("Cart empty")
-return
-}
-
-let id="MR"+Math.floor(Math.random()*9999)
-
-document.getElementById("success").style.display="flex"
-
-document.getElementById("orderID").innerText="Order ID "+id
-
-history.push(id)
-
-document.getElementById("history").innerHTML+=`<p>Order ${id}</p>`
-
-setTimeout(function(){
-
-document.getElementById("success").style.display="none"
-
-cart=[]
-
-updateCart()
-
-show("orders")
-
-},4000)
-
-}
-
-  </script>
