@@ -6,14 +6,15 @@
 
 <title>MR Biriyani</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#f3f3f3;
+background:#f5f5f5;
 }
 
 /* loading */
@@ -32,41 +33,18 @@ justify-content:center;
 z-index:999;
 }
 
-.loader{
-border:5px solid #eee;
-border-top:5px solid red;
-border-radius:50%;
-width:40px;
-height:40px;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-100%{transform:rotate(360deg)}
-}
-
 /* header */
 
 header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:10px;
+text-align:center;
+padding:15px;
 background:white;
+animation:fade 1s;
 }
 
-.logo{
-width:40px;
-}
-
-/* cart badge */
-
-#cartBadge{
-background:red;
-color:white;
-border-radius:50%;
-padding:3px 8px;
-font-size:12px;
+@keyframes fade{
+from{opacity:0}
+to{opacity:1}
 }
 
 /* slider */
@@ -77,7 +55,7 @@ height:180px;
 object-fit:cover;
 }
 
-/* food cards */
+/* menu */
 
 .menu{
 display:grid;
@@ -90,8 +68,8 @@ padding:10px;
 background:white;
 padding:10px;
 border-radius:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
 text-align:center;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
 }
 
 .card img{
@@ -105,6 +83,33 @@ border-radius:10px;
 display:flex;
 justify-content:center;
 gap:6px;
+margin-top:5px;
+}
+
+/* cart bar */
+
+#cartBar{
+position:fixed;
+bottom:60px;
+width:100%;
+background:#e63946;
+color:white;
+text-align:center;
+padding:12px;
+font-size:18px;
+}
+
+/* bottom nav */
+
+nav{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:10px;
+box-shadow:0 -3px 10px rgba(0,0,0,0.2);
 }
 
 /* checkout */
@@ -122,7 +127,7 @@ border-radius:8px;
 border:1px solid #ddd;
 }
 
-/* order success */
+/* success */
 
 #success{
 position:fixed;
@@ -132,8 +137,8 @@ width:100%;
 height:100%;
 background:white;
 display:none;
-justify-content:center;
 align-items:center;
+justify-content:center;
 flex-direction:column;
 font-size:24px;
 }
@@ -141,22 +146,9 @@ font-size:24px;
 /* map */
 
 #map{
-height:220px;
+height:200px;
 margin:10px;
 border-radius:10px;
-}
-
-/* bottom button */
-
-#orderBar{
-position:fixed;
-bottom:0;
-width:100%;
-background:#e63946;
-color:white;
-text-align:center;
-padding:15px;
-font-size:18px;
 }
 
 </style>
@@ -164,49 +156,27 @@ font-size:18px;
 
 <body>
 
-<!-- loading -->
-
 <div id="loading">
 
-<img src="logo.png" width="90">
-
 <h2>MR Biriyani</h2>
-
-<div class="loader"></div>
-
 <p>Loading delicious food...</p>
 
 </div>
 
-<!-- success -->
-
-<div id="success">
-
-<h1>✅ Order Confirmed</h1>
-
-<p>Your food is being prepared</p>
-
-</div>
-
-<!-- header -->
-
 <header>
 
-<img src="logo.png" class="logo">
+<h2>MR Biriyani</h2>
 
-<div>Cart <span id="cartBadge">0</span></div>
+<p>Welcome to Patnagarh</p>
 
 </header>
 
-<!-- slider -->
-
 <div class="slider">
 
-<img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+<img id="banner"
+src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
 
 </div>
-
-<!-- home -->
 
 <div id="home">
 
@@ -222,11 +192,11 @@ font-size:18px;
 
 <div class="qty">
 
-<button onclick="changeQty('chicken',-1)">−</button>
+<button onclick="changeQty('c',-1)">−</button>
 
-<span id="chicken">0</span>
+<span id="c">0</span>
 
-<button onclick="changeQty('chicken',1)">+</button>
+<button onclick="changeQty('c',1)">+</button>
 
 </div>
 
@@ -242,13 +212,11 @@ font-size:18px;
 
 <div class="qty">
 
-<button onclick="changeQty('matka',-1)">−</button>
+<button onclick="changeQty('m',-1)">−</button>
 
-<span id="matka">0</span>
+<span id="m">0</span>
 
-<button onclick="changeQty('matka',1)">+</button>
-
-</div>
+<button onclick="changeQty('m',1)">+</button>
 
 </div>
 
@@ -256,15 +224,15 @@ font-size:18px;
 
 </div>
 
-<!-- checkout -->
+</div>
 
 <div id="checkout">
 
 <h2>Delivery Details</h2>
 
-<input id="name" placeholder="Your Name">
+<input placeholder="Name">
 
-<input id="phone" placeholder="Mobile Number">
+<input placeholder="Mobile Number">
 
 <input id="address" placeholder="Delivery Address">
 
@@ -272,25 +240,41 @@ font-size:18px;
 
 <h3>Payment Method</h3>
 
-<label><input type="radio" name="pay"> Cash On Delivery</label><br>
-<label><input type="radio" name="pay"> UPI</label><br>
-<label><input type="radio" name="pay"> PhonePe</label>
-
-<br><br>
+<label><input type="radio" name="pay">Cash</label><br>
+<label><input type="radio" name="pay">UPI</label><br>
+<label><input type="radio" name="pay">PhonePe</label>
 
 <button onclick="confirmOrder()">Confirm Order</button>
 
 </div>
 
-<h3 style="padding-left:10px;">Delivery Map</h3>
+<div id="success">
+
+<h1>✅ Order Confirmed</h1>
+
+<p>Your food is being prepared</p>
+
+</div>
+
+<h3 style="padding-left:10px">Delivery Map</h3>
 
 <div id="map"></div>
 
-<div id="orderBar" onclick="openCheckout()">
+<div id="cartBar" onclick="openCheckout()">
 
 Place Order
 
 </div>
+
+<nav>
+
+<div onclick="showHome()">Home</div>
+
+<div onclick="showOrders()">Orders</div>
+
+<div>Profile</div>
+
+</nav>
 
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
@@ -330,20 +314,6 @@ if(q<0) q=0
 
 el.innerText=q
 
-updateCart()
-
-}
-
-function updateCart(){
-
-let total=0
-
-document.querySelectorAll(".qty span").forEach(e=>{
-total+=parseInt(e.innerText)
-})
-
-document.getElementById("cartBadge").innerText=total
-
 }
 
 /* checkout */
@@ -362,10 +332,8 @@ function getLocation(){
 
 navigator.geolocation.getCurrentPosition(pos=>{
 
-let lat=pos.coords.latitude
-let lon=pos.coords.longitude
-
-document.getElementById("address").value="Lat:"+lat+" Long:"+lon
+document.getElementById("address").value=
+pos.coords.latitude+","+pos.coords.longitude
 
 })
 
@@ -376,12 +344,6 @@ document.getElementById("address").value="Lat:"+lat+" Long:"+lon
 function confirmOrder(){
 
 document.getElementById("success").style.display="flex"
-
-setTimeout(()=>{
-
-document.getElementById("success").style.display="none"
-
-},4000)
 
 }
 
