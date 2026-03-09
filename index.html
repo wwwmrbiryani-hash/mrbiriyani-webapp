@@ -1,7 +1,12 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MR Biriyani</title><style>
+
+<title>MR Biriyani</title>
+
+<style>
 
 body{
 margin:0;
@@ -9,12 +14,10 @@ font-family:Arial;
 background:#f5f5f5;
 }
 
-/* LOADING */
+/* loading */
 
 #loading{
 position:fixed;
-top:0;
-left:0;
 width:100%;
 height:100%;
 background:white;
@@ -23,11 +26,6 @@ flex-direction:column;
 align-items:center;
 justify-content:center;
 z-index:999;
-}
-
-#loading img{
-width:110px;
-margin-bottom:10px;
 }
 
 .loader{
@@ -43,17 +41,49 @@ animation:spin 1s linear infinite;
 100%{transform:rotate(360deg)}
 }
 
-/* HEADER */
+/* sidebar */
+
+#sidebar{
+position:fixed;
+left:-250px;
+top:0;
+width:250px;
+height:100%;
+background:white;
+box-shadow:3px 0 10px rgba(0,0,0,0.2);
+transition:0.3s;
+padding:20px;
+z-index:1000;
+}
+
+#sidebar a{
+display:block;
+margin:15px 0;
+text-decoration:none;
+color:black;
+}
+
+/* header */
 
 header{
-text-align:center;
 background:white;
 padding:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+}
+
+.menuBtn{
+position:absolute;
+left:15px;
+font-size:22px;
+cursor:pointer;
 }
 
 .welcome{
 color:#e63946;
-font-weight:bold;
+font-size:14px;
 animation:fade 2s infinite alternate;
 }
 
@@ -62,7 +92,7 @@ from{opacity:0.4}
 to{opacity:1}
 }
 
-/* SLIDER */
+/* banner */
 
 .slider img{
 width:100%;
@@ -70,7 +100,24 @@ height:180px;
 object-fit:cover;
 }
 
-/* MENU */
+/* categories */
+
+.categories{
+display:flex;
+overflow:auto;
+padding:10px;
+gap:10px;
+}
+
+.cat{
+background:white;
+padding:10px 15px;
+border-radius:20px;
+white-space:nowrap;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* food */
 
 .menu{
 display:grid;
@@ -97,7 +144,7 @@ width:100%;
 border-radius:10px;
 }
 
-/* QTY */
+/* qty */
 
 .qty{
 display:flex;
@@ -109,9 +156,13 @@ margin-top:5px;
 .qty button{
 width:30px;
 height:30px;
+background:#e63946;
+color:white;
+border:none;
+border-radius:5px;
 }
 
-/* CART BADGE */
+/* cart badge */
 
 #cartBadge{
 position:fixed;
@@ -121,9 +172,16 @@ background:red;
 color:white;
 padding:6px 10px;
 border-radius:50%;
+animation:float 2s infinite;
 }
 
-/* ORDER BAR */
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-5px)}
+100%{transform:translateY(0)}
+}
+
+/* order bar */
 
 #orderBar{
 position:fixed;
@@ -133,10 +191,9 @@ background:#e63946;
 color:white;
 padding:15px;
 text-align:center;
-font-size:18px;
 }
 
-/* NAV */
+/* nav */
 
 nav{
 position:fixed;
@@ -149,9 +206,9 @@ padding:10px;
 box-shadow:0 -3px 10px rgba(0,0,0,0.2);
 }
 
-/* SCREENS */
+/* pages */
 
-#checkout,#profile{
+#checkout,#cartPage,#profile{
 display:none;
 padding:15px;
 }
@@ -164,12 +221,10 @@ border-radius:8px;
 border:1px solid #ccc;
 }
 
-/* SUCCESS */
+/* success */
 
 #success{
 position:fixed;
-top:0;
-left:0;
 width:100%;
 height:100%;
 background:white;
@@ -182,8 +237,8 @@ animation:pop 0.5s;
 }
 
 @keyframes pop{
-0%{transform:scale(0.5);opacity:0}
-100%{transform:scale(1);opacity:1}
+0%{transform:scale(0.5)}
+100%{transform:scale(1)}
 }
 
 button{
@@ -195,33 +250,211 @@ color:white;
 border-radius:8px;
 }
 
-</style></head><body><!-- LOADING --><div id="loading"><img src="https://cdn-icons-png.flaticon.com/512/5787/5787016.png"><h2>MR Biriyani</h2><div class="loader"></div></div><header><h2>MR Biriyani</h2><p class="welcome">Welcome to Patnagarh</p></header><div id="cartBadge">0</div><!-- BANNER --><div class="slider"><img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"></div><!-- HOME --><div id="home"><div class="menu"><div class="card"><img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d"><h3>Chicken Biryani</h3><p>₹120</p><div class="qty"><button onclick="changeQty('c',-1)">−</button>
+</style>
+
+</head>
+
+<body>
+
+<div id="loading">
+
+<img src="logo.png" width="100">
+
+<h2>MR Biriyani</h2>
+
+<div class="loader"></div>
+
+</div>
+
+<!-- sidebar -->
+
+<div id="sidebar">
+
+<h3>MR Biriyani</h3>
+
+<a onclick="showHome()">Home</a>
+
+<a onclick="showOrders()">Orders</a>
+
+<a onclick="showProfile()">Profile</a>
+
+</div>
+
+<header>
+
+<div class="menuBtn" onclick="toggleMenu()">☰</div>
+
+<div>
+
+<h2>MR Biriyani</h2>
+
+<div class="welcome">Welcome to Patnagarh</div>
+
+</div>
+
+</header>
+
+<div id="cartBadge">0</div>
+
+<!-- banner -->
+
+<div class="slider">
+
+<img id="banner" src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+
+</div>
+
+<!-- categories -->
+
+<div class="categories">
+
+<div class="cat">Biryani</div>
+
+<div class="cat">Chicken</div>
+
+<div class="cat">Veg</div>
+
+<div class="cat">Drinks</div>
+
+<div class="cat">Dessert</div>
+
+</div>
+
+<!-- home -->
+
+<div id="home">
+
+<div class="menu">
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+
+<h3>Chicken Biryani</h3>
+
+<p>⭐4.5</p>
+
+<p>₹120</p>
+
+<div class="qty">
+
+<button onclick="changeQty('c',-1)">-</button>
 
 <span id="c">0</span>
 
 <button onclick="changeQty('c',1)">+</button>
 
-</div></div><div class="card"><img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a"><h3>Matka Biryani</h3><p>₹180</p><div class="qty"><button onclick="changeQty('m',-1)">−</button>
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a">
+
+<h3>Matka Biryani</h3>
+
+<p>⭐4.7</p>
+
+<p>₹180</p>
+
+<div class="qty">
+
+<button onclick="changeQty('m',-1)">-</button>
 
 <span id="m">0</span>
 
 <button onclick="changeQty('m',1)">+</button>
 
-</div></div></div></div><!-- CHECKOUT --><div id="checkout"><h2>Delivery Details</h2><input id="name" placeholder="Name"><input id="phone" placeholder="Mobile Number"><input id="address" placeholder="Address"><button onclick="getLocation()">Use My Location</button>
+</div>
 
-<h3>Payment Method</h3><label><input type="radio" name="pay"> Cash</label><br>
+</div>
 
-<label><input type="radio" name="pay"> UPI</label>
+</div>
+
+</div>
+
+<!-- cart -->
+
+<div id="cartPage">
+
+<h2>Your Cart</h2>
+
+<div id="cartItems"></div>
+
+<h3>Total ₹<span id="cartTotal">0</span></h3>
+
+<button onclick="goCheckout()">Checkout</button>
+
+</div>
+
+<!-- checkout -->
+
+<div id="checkout">
+
+<h2>Delivery Details</h2>
+
+<input id="name" placeholder="Name">
+
+<input id="phone" placeholder="Phone">
+
+<input id="address" placeholder="Address">
+
+<button onclick="getLocation()">Use My Location</button>
+
+<h3>Payment</h3>
+
+<label><input type="radio" name="pay">Cash</label><br>
+
+<label><input type="radio" name="pay">UPI</label>
 
 <button onclick="confirmOrder()">Confirm Order</button>
 
-</div><!-- PROFILE --><div id="profile"><h2>Your Profile</h2><p>Name: Guest User</p><p>City: Patnagarh</p></div><!-- SUCCESS --><div id="success"><h1>✅ Order Confirmed</h1><p>Your food is being prepared</p><button onclick="goHome()">Back Home</button>
+</div>
 
-</div><!-- ORDER BAR --><div id="orderBar" onclick="openCheckout()">Place Order ₹<span id="total">0</span>
+<!-- profile -->
 
-</div><!-- NAV --><nav><div onclick="showHome()">Home</div><div onclick="showOrders()">Orders</div><div onclick="showProfile()">Profile</div></nav><script>
+<div id="profile">
 
-/* LOADING */
+<h2>Profile</h2>
+
+<p>Guest User</p>
+
+<p>Patnagarh</p>
+
+</div>
+
+<!-- success -->
+
+<div id="success">
+
+<h1>✅ Order Confirmed</h1>
+
+<p>Your food is being prepared</p>
+
+<button onclick="location.reload()">Back Home</button>
+
+</div>
+
+<div id="orderBar" onclick="openCart()">
+
+Place Order ₹<span id="total">0</span>
+
+</div>
+
+<nav>
+
+<div onclick="showHome()">Home</div>
+
+<div onclick="showOrders()">Orders</div>
+
+<div onclick="showProfile()">Profile</div>
+
+</nav>
+
+<script>
+
+/* loading */
 
 setTimeout(()=>{
 
@@ -229,7 +462,25 @@ document.getElementById("loading").style.display="none"
 
 },2500)
 
-/* BANNER */
+/* sidebar */
+
+function toggleMenu(){
+
+let s=document.getElementById("sidebar")
+
+if(s.style.left=="0px"){
+
+s.style.left="-250px"
+
+}else{
+
+s.style.left="0px"
+
+}
+
+}
+
+/* banner */
 
 let banners=[
 
@@ -249,7 +500,7 @@ document.getElementById("banner").src=banners[b]
 
 },3000)
 
-/* CART */
+/* cart */
 
 function changeQty(id,val){
 
@@ -281,80 +532,79 @@ document.getElementById("cartBadge").innerText=c+m
 
 }
 
-/* CHECKOUT */
+/* cart page */
 
-function openCheckout(){
+function openCart(){
 
 document.getElementById("home").style.display="none"
 
-document.getElementById("profile").style.display="none"
+document.getElementById("cartPage").style.display="block"
+
+let c=parseInt(document.getElementById("c").innerText)
+
+let m=parseInt(document.getElementById("m").innerText)
+
+let html=""
+
+if(c>0) html+="Chicken Biryani x "+c+"<br>"
+
+if(m>0) html+="Matka Biryani x "+m+"<br>"
+
+document.getElementById("cartItems").innerHTML=html
+
+document.getElementById("cartTotal").innerText=c*120+m*180
+
+}
+
+/* checkout */
+
+function goCheckout(){
+
+document.getElementById("cartPage").style.display="none"
 
 document.getElementById("checkout").style.display="block"
 
 }
 
-/* LOCATION */
+/* location */
 
 function getLocation(){
 
-if(navigator.geolocation){
+navigator.geolocation.getCurrentPosition(function(pos){
 
-navigator.geolocation.getCurrentPosition(function(position){
+let lat=pos.coords.latitude
 
-let lat=position.coords.latitude
-let lon=position.coords.longitude
+let lon=pos.coords.longitude
 
 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
 .then(res=>res.json())
 .then(data=>{
+
 document.getElementById("address").value=data.display_name
-})
 
 })
 
-}else{
-
-alert("Location not supported")
+})
 
 }
 
-}
-
-/* CONFIRM */
+/* confirm */
 
 function confirmOrder(){
 
-let order={time:new Date().toLocaleString()}
-
-let history=JSON.parse(localStorage.getItem("orders")||"[]")
-
-history.push(order)
-
-localStorage.setItem("orders",JSON.stringify(history))
-
 document.getElementById("success").style.display="flex"
 
-}
+document.getElementById("orderBar").style.display="none"
 
-/* ORDERS */
-
-function showOrders(){
-
-let history=JSON.parse(localStorage.getItem("orders")||"[]")
-
-alert("Your Orders:\n\n"+history.map(o=>o.time).join("\n"))
+document.querySelector("nav").style.display="none"
 
 }
 
-/* NAVIGATION */
+/* nav */
 
 function showHome(){
 
-document.getElementById("home").style.display="block"
-
-document.getElementById("checkout").style.display="none"
-
-document.getElementById("profile").style.display="none"
+location.reload()
 
 }
 
@@ -362,17 +612,17 @@ function showProfile(){
 
 document.getElementById("home").style.display="none"
 
-document.getElementById("checkout").style.display="none"
-
 document.getElementById("profile").style.display="block"
 
 }
 
-function goHome(){
+function showOrders(){
 
-location.reload()
+alert("Orders saved locally")
 
 }
 
-</script></body>
-</html>
+</script>
+
+</body>
+  </html>
