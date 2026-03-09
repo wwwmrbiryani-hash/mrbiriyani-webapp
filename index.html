@@ -9,8 +9,8 @@
 
 body{
 margin:0;
-font-family:Arial;
-background:#f5f5f5;
+font-family:system-ui;
+background:#f4f4f4;
 overflow-x:hidden;
 }
 
@@ -25,14 +25,14 @@ height:100%;
 background:white;
 display:flex;
 flex-direction:column;
-justify-content:center;
 align-items:center;
+justify-content:center;
 z-index:9999;
 }
 
 .loader{
 border:6px solid #eee;
-border-top:6px solid red;
+border-top:6px solid #e63946;
 border-radius:50%;
 width:45px;
 height:45px;
@@ -46,12 +46,12 @@ margin-top:15px;
 
 .logo{
 width:110px;
-animation:bounce 1.5s infinite;
+animation:bounce 1.6s infinite;
 }
 
 @keyframes bounce{
 0%{transform:translateY(0)}
-50%{transform:translateY(-12px)}
+50%{transform:translateY(-10px)}
 100%{transform:translateY(0)}
 }
 
@@ -64,7 +64,15 @@ text-align:center;
 box-shadow:0 2px 10px rgba(0,0,0,0.1);
 position:sticky;
 top:0;
-z-index:2;
+z-index:5;
+}
+
+.menuBtn{
+position:absolute;
+left:15px;
+top:18px;
+font-size:20px;
+cursor:pointer;
 }
 
 /* SIDEBAR */
@@ -79,15 +87,15 @@ background:white;
 box-shadow:2px 0 15px rgba(0,0,0,0.3);
 transition:0.3s;
 padding:20px;
-z-index:3;
+z-index:1000;
 }
 
 #sidebar a{
 display:block;
 padding:12px;
+font-size:18px;
 text-decoration:none;
 color:black;
-font-size:18px;
 }
 
 #overlay{
@@ -98,7 +106,7 @@ width:100%;
 height:100%;
 background:rgba(0,0,0,0.4);
 display:none;
-z-index:2;
+z-index:900;
 }
 
 /* BANNER */
@@ -126,21 +134,21 @@ box-shadow:0 2px 5px rgba(0,0,0,0.1);
 white-space:nowrap;
 }
 
-/* MENU */
+/* FOOD GRID */
 
 .menu{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:10px;
+gap:12px;
 padding:10px;
 }
 
 .card{
 background:white;
-border-radius:10px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
 padding:10px;
 text-align:center;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
 .card img{
@@ -152,6 +160,7 @@ border-radius:10px;
 display:flex;
 justify-content:center;
 gap:10px;
+margin-top:8px;
 }
 
 .qty button{
@@ -161,6 +170,7 @@ border:none;
 background:#e63946;
 color:white;
 border-radius:6px;
+font-size:16px;
 }
 
 /* ORDER BAR */
@@ -173,6 +183,7 @@ background:#e63946;
 color:white;
 text-align:center;
 padding:15px;
+font-size:18px;
 }
 
 /* NAV */
@@ -184,11 +195,11 @@ width:100%;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:10px;
-box-shadow:0 -3px 10px rgba(0,0,0,0.2);
+padding:12px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.2);
 }
 
-/* PAGE */
+/* PAGES */
 
 .page{
 display:none;
@@ -197,7 +208,7 @@ padding:15px;
 
 input{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:10px;
 border-radius:8px;
 border:1px solid #ccc;
@@ -205,8 +216,8 @@ border:1px solid #ccc;
 
 button{
 padding:10px;
-background:#e63946;
 border:none;
+background:#e63946;
 color:white;
 border-radius:8px;
 margin-top:10px;
@@ -247,7 +258,7 @@ margin-top:10px;
 
 <header>
 
-<span onclick="openMenu()">☰</span>
+<div class="menuBtn" onclick="openMenu()">☰</div>
 
 <h2>MR Biriyani</h2>
 
@@ -407,18 +418,28 @@ Place Order ₹<span id="total">0</span>
 
 setTimeout(()=>{
 document.getElementById("loading").style.display="none"
-},2500)
+},2200)
 
 /* SIDEBAR */
 
 function openMenu(){
+
 document.getElementById("sidebar").style.left="0"
+
 document.getElementById("overlay").style.display="block"
+
+document.body.style.overflow="hidden"
+
 }
 
 function closeMenu(){
+
 document.getElementById("sidebar").style.left="-260px"
+
 document.getElementById("overlay").style.display="none"
+
+document.body.style.overflow="auto"
+
 }
 
 /* BANNER */
@@ -464,7 +485,7 @@ document.getElementById("total").innerText=total
 
 }
 
-/* CART PAGE */
+/* OPEN CART */
 
 function openCart(){
 
@@ -496,7 +517,7 @@ document.getElementById("checkout").style.display="block"
 
 }
 
-/* LOCATION */
+/* LOCATION AUTO ADDRESS */
 
 function getLocation(){
 
@@ -515,21 +536,21 @@ document.getElementById("address").value=data.display_name
 
 }
 
-/* ORDER */
+/* CONFIRM ORDER */
 
 function confirmOrder(){
 
-let order="Order placed ₹"+document.getElementById("cartTotal").innerText
+let total=document.getElementById("cartTotal").innerText
 
 let old=localStorage.getItem("orders") || ""
 
-localStorage.setItem("orders",old+"<br>"+order)
+localStorage.setItem("orders",old+"<br>Order ₹"+total)
 
 showOrders()
 
 }
 
-/* SHOW ORDERS */
+/* ORDERS */
 
 function showOrders(){
 
@@ -538,7 +559,7 @@ hidePages()
 document.getElementById("orders").style.display="block"
 
 document.getElementById("orderHistory").innerHTML=
-localStorage.getItem("orders") || "No Orders"
+localStorage.getItem("orders") || "No Orders Yet"
 
 }
 
@@ -562,7 +583,7 @@ document.getElementById("home").style.display="block"
 
 }
 
-/* HIDE */
+/* HIDE PAGES */
 
 function hidePages(){
 
