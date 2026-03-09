@@ -3,7 +3,6 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>MR Biriyani</title>
 
 <style>
@@ -15,10 +14,12 @@ background:#f5f5f5;
 overflow-x:hidden;
 }
 
-/* LOADING */
+/* ---------- LOADING SCREEN ---------- */
 
 #loading{
 position:fixed;
+top:0;
+left:0;
 width:100%;
 height:100%;
 background:white;
@@ -43,83 +44,32 @@ margin-top:15px;
 100%{transform:rotate(360deg)}
 }
 
-/* SIDEBAR */
-
-#sidebar{
-position:fixed;
-left:-260px;
-top:0;
-width:260px;
-height:100%;
-background:white;
-box-shadow:3px 0 10px rgba(0,0,0,0.2);
-transition:0.3s;
-padding:20px;
-z-index:1000;
+.logo{
+width:110px;
+animation:bounce 1.6s infinite;
 }
 
-#sidebar a{
-display:block;
-margin:15px 0;
-font-size:18px;
-text-decoration:none;
-color:black;
+@keyframes bounce{
+0%{transform:translateY(0)}
+50%{transform:translateY(-12px)}
+100%{transform:translateY(0)}
 }
 
-/* overlay */
-
-#overlay{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.4);
-display:none;
-z-index:900;
-}
-
-/* HEADER */
+/* ---------- HEADER ---------- */
 
 header{
 background:white;
 padding:15px;
 text-align:center;
-position:relative;
-animation:fadeDown 0.7s;
-}
-
-@keyframes fadeDown{
-from{opacity:0;transform:translateY(-20px)}
-to{opacity:1}
-}
-
-.menuBtn{
-position:absolute;
-left:15px;
-top:15px;
-font-size:22px;
-cursor:pointer;
-}
-
-.logo{
-width:55px;
-margin-bottom:5px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
 .welcome{
 color:#e63946;
 font-size:14px;
-animation:pulse 2s infinite;
 }
 
-@keyframes pulse{
-0%{opacity:0.4}
-50%{opacity:1}
-100%{opacity:0.4}
-}
-
-/* banner */
+/* ---------- BANNER ---------- */
 
 .slider img{
 width:100%;
@@ -127,7 +77,7 @@ height:180px;
 object-fit:cover;
 }
 
-/* categories */
+/* ---------- CATEGORY ---------- */
 
 .categories{
 display:flex;
@@ -138,13 +88,13 @@ padding:10px;
 
 .cat{
 background:white;
-padding:10px 16px;
+padding:10px 15px;
 border-radius:20px;
 box-shadow:0 2px 5px rgba(0,0,0,0.1);
 white-space:nowrap;
 }
 
-/* food */
+/* ---------- FOOD ---------- */
 
 .menu{
 display:grid;
@@ -159,11 +109,6 @@ border-radius:10px;
 padding:10px;
 text-align:center;
 box-shadow:0 3px 10px rgba(0,0,0,0.1);
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.04);
 }
 
 .card img{
@@ -171,25 +116,25 @@ width:100%;
 border-radius:10px;
 }
 
-/* qty */
+/* ---------- QTY ---------- */
 
 .qty{
 display:flex;
 justify-content:center;
 gap:10px;
-margin-top:8px;
+margin-top:5px;
 }
 
 .qty button{
 width:32px;
 height:32px;
+border:none;
 background:#e63946;
 color:white;
-border:none;
 border-radius:6px;
 }
 
-/* cart badge */
+/* ---------- CART BADGE ---------- */
 
 #cartBadge{
 position:fixed;
@@ -202,7 +147,7 @@ border-radius:50%;
 font-size:14px;
 }
 
-/* order bar */
+/* ---------- ORDER BAR ---------- */
 
 #orderBar{
 position:fixed;
@@ -215,7 +160,7 @@ text-align:center;
 font-size:18px;
 }
 
-/* bottom nav */
+/* ---------- NAV ---------- */
 
 nav{
 position:fixed;
@@ -228,14 +173,12 @@ padding:10px;
 box-shadow:0 -3px 10px rgba(0,0,0,0.2);
 }
 
-/* pages */
+/* ---------- PAGES ---------- */
 
 .page{
 display:none;
 padding:15px;
 }
-
-/* inputs */
 
 input{
 width:100%;
@@ -245,7 +188,7 @@ border-radius:8px;
 border:1px solid #ccc;
 }
 
-/* success */
+/* ---------- SUCCESS ---------- */
 
 #success{
 position:fixed;
@@ -263,10 +206,10 @@ font-size:26px;
 
 button{
 margin-top:10px;
-padding:10px 15px;
+padding:10px;
 background:#e63946;
-color:white;
 border:none;
+color:white;
 border-radius:8px;
 }
 
@@ -275,41 +218,23 @@ border-radius:8px;
 
 <body>
 
-<!-- LOADING -->
+<!-- ---------- LOADING ---------- -->
 
 <div id="loading">
 
-<img src="logo.png" width="90">
+<img src="logo.png" class="logo">
 
 <h2>MR Biriyani</h2>
 
 <div class="loader"></div>
 
-<p>Loading delicious food...</p>
+<p>Preparing delicious food...</p>
 
 </div>
 
-<!-- SIDEBAR -->
-
-<div id="sidebar">
-
-<h2>MR Biriyani</h2>
-
-<a onclick="showHome()">Home</a>
-
-<a onclick="showOrders()">Orders</a>
-
-<a onclick="showProfile()">Profile</a>
-
-</div>
-
-<div id="overlay" onclick="closeMenu()"></div>
+<!-- ---------- HEADER ---------- -->
 
 <header>
-
-<div class="menuBtn" onclick="toggleMenu()">☰</div>
-
-<img src="logo.png" class="logo">
 
 <h2>MR Biriyani</h2>
 
@@ -319,7 +244,7 @@ border-radius:8px;
 
 <div id="cartBadge">0</div>
 
-<!-- banner -->
+<!-- ---------- BANNER ---------- -->
 
 <div class="slider">
 
@@ -327,7 +252,7 @@ border-radius:8px;
 
 </div>
 
-<!-- categories -->
+<!-- ---------- CATEGORY ---------- -->
 
 <div class="categories">
 
@@ -339,7 +264,7 @@ border-radius:8px;
 
 </div>
 
-<!-- HOME -->
+<!-- ---------- HOME ---------- -->
 
 <div id="home">
 
@@ -393,7 +318,7 @@ border-radius:8px;
 
 </div>
 
-<!-- CART -->
+<!-- ---------- CART ---------- -->
 
 <div id="cartPage" class="page">
 
@@ -407,7 +332,7 @@ border-radius:8px;
 
 </div>
 
-<!-- CHECKOUT -->
+<!-- ---------- CHECKOUT ---------- -->
 
 <div id="checkout" class="page">
 
@@ -423,15 +348,15 @@ border-radius:8px;
 
 <h3>Payment</h3>
 
-<label><input type="radio" name="pay">Cash</label><br>
+<label><input type="radio" name="pay"> Cash</label><br>
 
-<label><input type="radio" name="pay">UPI</label>
+<label><input type="radio" name="pay"> UPI</label>
 
 <button onclick="confirmOrder()">Confirm Order</button>
 
 </div>
 
-<!-- PROFILE -->
+<!-- ---------- PROFILE ---------- -->
 
 <div id="profile" class="page">
 
@@ -443,7 +368,7 @@ border-radius:8px;
 
 </div>
 
-<!-- SUCCESS -->
+<!-- ---------- SUCCESS ---------- -->
 
 <div id="success">
 
@@ -479,23 +404,7 @@ setTimeout(()=>{
 
 document.getElementById("loading").style.display="none"
 
-},3000)
-
-/* sidebar */
-
-function toggleMenu(){
-
-document.getElementById("sidebar").style.left="0px"
-document.getElementById("overlay").style.display="block"
-
-}
-
-function closeMenu(){
-
-document.getElementById("sidebar").style.left="-260px"
-document.getElementById("overlay").style.display="none"
-
-}
+},2500)
 
 /* banner */
 
@@ -535,7 +444,6 @@ updateCart()
 function updateCart(){
 
 let c=parseInt(document.getElementById("c").innerText)
-
 let m=parseInt(document.getElementById("m").innerText)
 
 let total=c*120+m*180
@@ -546,7 +454,7 @@ document.getElementById("cartBadge").innerText=c+m
 
 }
 
-/* cart page */
+/* cart */
 
 function openCart(){
 
@@ -563,13 +471,12 @@ if(c>0) html+="Chicken Biryani x "+c+"<br>"
 if(m>0) html+="Matka Biryani x "+m+"<br>"
 
 document.getElementById("cartItems").innerHTML=html
+
 document.getElementById("cartTotal").innerText=c*120+m*180
 
 document.getElementById("orderBar").style.display="none"
 
 }
-
-/* checkout */
 
 function goCheckout(){
 
@@ -585,7 +492,7 @@ function getLocation(){
 
 navigator.geolocation.getCurrentPosition(function(pos){
 
-document.getElementById("address").value=
+document.getElementById("address").value =
 pos.coords.latitude+","+pos.coords.longitude
 
 })
