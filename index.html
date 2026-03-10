@@ -10,8 +10,49 @@
 body{
 margin:0;
 font-family:Arial;
-background:#f4f4f4;
+background:#f5f5f5;
 overflow-x:hidden;
+}
+
+/* LOADING */
+
+#loading{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.loader{
+border:6px solid #eee;
+border-top:6px solid red;
+border-radius:50%;
+width:45px;
+height:45px;
+animation:spin 1s linear infinite;
+margin-top:15px;
+}
+
+@keyframes spin{
+100%{transform:rotate(360deg)}
+}
+
+.logo{
+width:110px;
+animation:bounce 1.5s infinite;
+}
+
+@keyframes bounce{
+0%{transform:translateY(0)}
+50%{transform:translateY(-12px)}
+100%{transform:translateY(0)}
 }
 
 /* HEADER */
@@ -23,30 +64,30 @@ text-align:center;
 box-shadow:0 2px 10px rgba(0,0,0,0.1);
 position:sticky;
 top:0;
-z-index:10;
-}
-
-.menuBtn{
-position:absolute;
-left:15px;
-top:18px;
-font-size:22px;
-cursor:pointer;
+z-index:2;
 }
 
 /* SIDEBAR */
 
 #sidebar{
 position:fixed;
-top:0;
 left:-260px;
+top:0;
 width:260px;
 height:100%;
 background:white;
-box-shadow:2px 0 20px rgba(0,0,0,0.3);
-transition:0.35s;
+box-shadow:2px 0 15px rgba(0,0,0,0.3);
+transition:0.3s;
 padding:20px;
-z-index:1001;
+z-index:3;
+}
+
+#sidebar a{
+display:block;
+padding:12px;
+text-decoration:none;
+color:black;
+font-size:18px;
 }
 
 #overlay{
@@ -55,23 +96,9 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.45);
+background:rgba(0,0,0,0.4);
 display:none;
-z-index:1000;
-}
-
-/* SEARCH */
-
-.searchBox{
-padding:10px;
-}
-
-.searchBox input{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:1px solid #ddd;
-font-size:16px;
+z-index:2;
 }
 
 /* BANNER */
@@ -99,21 +126,21 @@ box-shadow:0 2px 5px rgba(0,0,0,0.1);
 white-space:nowrap;
 }
 
-/* FOOD */
+/* MENU */
 
 .menu{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:12px;
+gap:10px;
 padding:10px;
 }
 
 .card{
 background:white;
-border-radius:12px;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
+border-radius:10px;
 padding:10px;
 text-align:center;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
 .card img{
@@ -125,7 +152,6 @@ border-radius:10px;
 display:flex;
 justify-content:center;
 gap:10px;
-margin-top:8px;
 }
 
 .qty button{
@@ -135,34 +161,55 @@ border:none;
 background:#e63946;
 color:white;
 border-radius:6px;
-font-size:16px;
 }
 
-/* CART BAR */
+/* ORDER BAR */
 
 #orderBar{
 position:fixed;
-bottom:0;
+bottom:60px;
 width:100%;
 background:#e63946;
 color:white;
 text-align:center;
 padding:15px;
-font-size:18px;
 }
 
-/* CART POPUP */
+/* NAV */
 
-#cartPopup{
+nav{
 position:fixed;
-bottom:-200px;
-left:0;
+bottom:0;
 width:100%;
 background:white;
-padding:20px;
-box-shadow:0 -3px 20px rgba(0,0,0,0.2);
-transition:0.4s;
-text-align:center;
+display:flex;
+justify-content:space-around;
+padding:10px;
+box-shadow:0 -3px 10px rgba(0,0,0,0.2);
+}
+
+/* PAGE */
+
+.page{
+display:none;
+padding:15px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+padding:10px;
+background:#e63946;
+border:none;
+color:white;
+border-radius:8px;
+margin-top:10px;
 }
 
 </style>
@@ -170,7 +217,19 @@ text-align:center;
 
 <body>
 
-<div id="overlay" onclick="closeMenu()"></div>
+<!-- LOADING -->
+
+<div id="loading">
+
+<img src="logo.png" class="logo">
+
+<h2>MR Biriyani</h2>
+
+<div class="loader"></div>
+
+<p>Preparing delicious food...</p>
+
+</div>
 
 <!-- SIDEBAR -->
 
@@ -178,17 +237,17 @@ text-align:center;
 
 <h3>MR Biriyani</h3>
 
-<p onclick="closeMenu()">Home</p>
-<p onclick="alert('Orders page coming soon')">My Orders</p>
-<p onclick="alert('Profile page coming soon')">Profile</p>
+<a onclick="showHome()">Home</a>
+<a onclick="showOrders()">My Orders</a>
+<a onclick="showProfile()">Profile</a>
 
 </div>
 
-<!-- HEADER -->
+<div id="overlay" onclick="closeMenu()"></div>
 
 <header>
 
-<div class="menuBtn" onclick="openMenu()">☰</div>
+<span onclick="openMenu()">☰</span>
 
 <h2>MR Biriyani</h2>
 
@@ -197,18 +256,6 @@ Welcome to Patnagarh
 </div>
 
 </header>
-
-<!-- SEARCH -->
-
-<div class="searchBox">
-
-<input 
-id="searchFood"
-placeholder="Search food..."
-onkeyup="searchFood()"
->
-
-</div>
 
 <!-- BANNER -->
 
@@ -230,7 +277,9 @@ onkeyup="searchFood()"
 
 </div>
 
-<!-- MENU -->
+<!-- HOME -->
+
+<div id="home">
 
 <div class="menu">
 
@@ -276,76 +325,114 @@ onkeyup="searchFood()"
 
 </div>
 
-<div id="orderBar">
+</div>
+
+<!-- CART -->
+
+<div id="cartPage" class="page">
+
+<h2>Your Cart</h2>
+
+<div id="cartItems"></div>
+
+<h3>Total ₹<span id="cartTotal">0</span></h3>
+
+<button onclick="goCheckout()">Checkout</button>
+
+</div>
+
+<!-- CHECKOUT -->
+
+<div id="checkout" class="page">
+
+<h2>Delivery Details</h2>
+
+<input placeholder="Name">
+
+<input placeholder="Phone">
+
+<input id="address" placeholder="Address">
+
+<button onclick="getLocation()">Use My Location</button>
+
+<h3>Payment</h3>
+
+<label><input type="radio"> Cash</label><br>
+
+<label><input type="radio"> UPI</label>
+
+<button onclick="confirmOrder()">Confirm Order</button>
+
+</div>
+
+<!-- ORDERS -->
+
+<div id="orders" class="page">
+
+<h2>My Orders</h2>
+
+<div id="orderHistory"></div>
+
+</div>
+
+<!-- PROFILE -->
+
+<div id="profile" class="page">
+
+<h2>Profile</h2>
+
+<p>Guest User</p>
+
+</div>
+
+<div id="orderBar" onclick="openCart()">
 
 Place Order ₹<span id="total">0</span>
 
 </div>
 
-<div id="cartPopup">
+<nav>
 
-Item added to cart 🛒
+<div onclick="showHome()">Home</div>
 
-</div>
+<div onclick="showOrders()">Orders</div>
+
+<div onclick="showProfile()">Profile</div>
+
+</nav>
 
 <script>
+
+/* LOADING */
+
+setTimeout(()=>{
+document.getElementById("loading").style.display="none"
+},2500)
 
 /* SIDEBAR */
 
 function openMenu(){
-
 document.getElementById("sidebar").style.left="0"
-
 document.getElementById("overlay").style.display="block"
-
-document.body.style.overflow="hidden"
-
 }
 
 function closeMenu(){
-
 document.getElementById("sidebar").style.left="-260px"
-
 document.getElementById("overlay").style.display="none"
-
-document.body.style.overflow="auto"
-
-}
-
-/* SEARCH */
-
-function searchFood(){
-
-let input=document.getElementById("searchFood").value.toLowerCase()
-
-let cards=document.querySelectorAll(".card")
-
-cards.forEach(card=>{
-
-let text=card.innerText.toLowerCase()
-
-card.style.display=text.includes(input) ? "block":"none"
-
-})
-
 }
 
 /* BANNER */
 
 let banners=[
 "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d",
-"https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a",
-"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38"
+"https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a"
 ]
 
 let b=0
 
 setInterval(()=>{
-
 b=(b+1)%banners.length
-
 document.getElementById("banner").src=banners[b]
-
 },3000)
 
 /* CART */
@@ -364,8 +451,6 @@ el.innerText=q
 
 updateCart()
 
-showCartPopup()
-
 }
 
 function updateCart(){
@@ -379,17 +464,113 @@ document.getElementById("total").innerText=total
 
 }
 
-/* POPUP */
+/* CART PAGE */
 
-function showCartPopup(){
+function openCart(){
 
-let popup=document.getElementById("cartPopup")
+hidePages()
 
-popup.style.bottom="70px"
+document.getElementById("cartPage").style.display="block"
 
-setTimeout(()=>{
-popup.style.bottom="-200px"
-},2000)
+let c=parseInt(document.getElementById("c").innerText)
+let m=parseInt(document.getElementById("m").innerText)
+
+let html=""
+
+if(c>0) html+="Chicken Biryani x "+c+"<br>"
+if(m>0) html+="Matka Biryani x "+m+"<br>"
+
+document.getElementById("cartItems").innerHTML=html
+
+document.getElementById("cartTotal").innerText=c*120+m*180
+
+}
+
+/* CHECKOUT */
+
+function goCheckout(){
+
+hidePages()
+
+document.getElementById("checkout").style.display="block"
+
+}
+
+/* LOCATION */
+
+function getLocation(){
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+let lat=pos.coords.latitude
+let lon=pos.coords.longitude
+
+fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("address").value=data.display_name
+})
+
+})
+
+}
+
+/* ORDER */
+
+function confirmOrder(){
+
+let order="Order placed ₹"+document.getElementById("cartTotal").innerText
+
+let old=localStorage.getItem("orders") || ""
+
+localStorage.setItem("orders",old+"<br>"+order)
+
+showOrders()
+
+}
+
+/* SHOW ORDERS */
+
+function showOrders(){
+
+hidePages()
+
+document.getElementById("orders").style.display="block"
+
+document.getElementById("orderHistory").innerHTML=
+localStorage.getItem("orders") || "No Orders"
+
+}
+
+/* PROFILE */
+
+function showProfile(){
+
+hidePages()
+
+document.getElementById("profile").style.display="block"
+
+}
+
+/* HOME */
+
+function showHome(){
+
+hidePages()
+
+document.getElementById("home").style.display="block"
+
+}
+
+/* HIDE */
+
+function hidePages(){
+
+document.getElementById("home").style.display="none"
+document.getElementById("cartPage").style.display="none"
+document.getElementById("checkout").style.display="none"
+document.getElementById("orders").style.display="none"
+document.getElementById("profile").style.display="none"
 
 }
 
